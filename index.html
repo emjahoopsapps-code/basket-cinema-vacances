@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Basket & Cinéma — Challenge Vacances</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#19263b;--text:#f5f7fb;--muted:#aab6c9;--orange:#ff8a26;--line:#2b3a52;--green:#7ee0b5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#26344b 0,#0b1220 42%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+header{padding:28px 18px 20px;max-width:1100px;margin:auto} .eyebrow{color:var(--orange);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.4rem 0}h2{margin:.2rem 0 1rem}p{color:var(--muted);margin:.45rem 0 1rem}
+main{max-width:1100px;margin:auto;padding:0 18px 50px}.hero{background:linear-gradient(135deg,#19263b,#111a2b);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:center}
+.hero-badge{font-size:4rem;text-align:center}.tag{display:inline-block;background:#2b3a52;color:#dce7f8;padding:5px 9px;border-radius:999px;font-size:.8rem;margin:3px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;border-radius:12px;background:var(--orange);color:#1b140d;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.btn.secondary{background:#26364e;color:var(--text);border:1px solid #3a4b66}button:disabled{opacity:.45;cursor:not-allowed}
+.tab{background:#18253a;color:var(--muted);border:1px solid var(--line)}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
+.panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100%;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero-badge{display:none}.grid{grid-template-columns:1fr}.panel{padding:16px}nav button{flex:1}}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">🏀 Le défi des vacances</div>
+ <h1>Basket <span style="color:var(--orange)">&</span> Cinéma</h1>
+ <p>Découvre les films qui ont marqué la culture basket. Regarde, joue, marque des points et défie tes coéquipiers.</p>
+ <span class="tag">14–18 ans</span><span class="tag">Solo ou en équipe</span><span class="tag">100 % depuis ton téléphone</span>
+</header>
+<main>
+ <section class="hero">
+  <div><h2>Prêt à devenir le MVP du cinéma basket ?</h2><p>Choisis ton profil, découvre les films, puis lance le quiz. Tes résultats sont enregistrés sur cet appareil.</p><button onclick="showTab('profil')">Créer mon profil →</button></div>
+  <div class="hero-badge" aria-hidden="true">🎬🏀</div>
+ </section>
+ <nav aria-label="Navigation">
+  <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films</button>
+  <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
+  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Mon profil</button>
+  <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores</button>
+ </nav>
+ <section id="films" class="view">
+  <h2>À découvrir</h2><p>Lis le pitch, trouve le film sur une plateforme légale, regarde-le, puis coche « Vu » pour suivre ta progression.</p>
+  <div id="movieGrid" class="grid"></div>
+  <div class="notice" style="margin-top:16px">Les disponibilités changent selon le pays et la date. Les liens de recherche servent à trouver une offre légale ; cette application ne diffuse aucun film.</div>
+ </section>
+ <section id="quiz" class="view hidden">
+  <div class="panel">
+   <div class="row"><div><div class="eyebrow">Challenge individuel</div><h2 id="quizTitle">Quiz basket & cinéma</h2></div><div style="text-align:right"><div class="score" id="liveScore">0</div><div class="small">points gagnés ici</div></div></div>
+   <p id="quizIntro">10 questions, du niveau rookie au niveau MVP. Une bonne réponse vaut 10 points.</p>
+   <div id="quizArea"><button onclick="startQuiz()">Lancer le quiz</button></div>
+  </div>
+ </section>
+ <section id="profil" class="view hidden">
+  <div class="panel"><h2>Ton profil joueur</h2><p>Utilise un prénom ou un pseudo. Évite les informations personnelles comme ton nom complet ou ton adresse.</p>
+   <form id="profileForm">
+    <label class="field">Prénom ou pseudo<input id="playerName" maxlength="24" placeholder="Ex. The Shooter" required></label>
+    <label class="field">Nom de ton équipe<input id="teamName" maxlength="30" placeholder="Ex. Les Panthers"></label>
+    <button type="submit">Enregistrer mon profil</button>
+   </form>
+   <div id="profileStatus" class="feedback hidden"></div>
+   <div class="panel" style="margin-top:18px"><h3>Ma progression</h3><div class="row"><div><div class="score" id="profilePoints">0</div><div class="small">points cumulés sur cet appareil</div></div><div><div class="score" id="profileWatched">0/7</div><div class="small">films marqués comme vus</div></div></div><p id="profileBadge" class="pill">🏀 Rookie Cinéphile</p></div>
+  </div>
+ </section>
+ <section id="classement" class="view hidden">
+  <div class="panel"><h2>Classement sur cet appareil</h2><p>Ce classement est local : il affiche les résultats enregistrés dans ce navigateur, pas encore ceux de tous les coéquipiers.</p><div id="leaderboard"></div><button class="secondary" onclick="shareProgress()">Partager ma progression</button> <button class="secondary" onclick="exportProgress()">Exporter mes résultats</button></div>
+ </section>
+</main>
+<footer>Basket & Cinéma — Challenge Vacances · Créé pour jouer fair-play et découvrir la culture basket.</footer>
+<script>
+const movies = [
+ {id:"hustle",title:"Le Haut du panier",original:"Hustle",year:2022,emoji:"🏀",level:"Détection & mental",pitch:"Un recruteur de basket découvre un joueur talentueux et tente de lui ouvrir les portes de la NBA. Un film sur le travail, les opportunités et la persévérance.",learn:"Le scouting, la préparation et la capacité à rebondir après un échec.",search:"Hustle 2022 film streaming légal France"},
+ {id:"coach",title:"Coach Carter",original:"Coach Carter",year:2005,emoji:"📋",level:"Leadership & discipline",pitch:"Un entraîneur impose des exigences fortes à son équipe et rappelle que les études et le respect comptent autant que les résultats sportifs.",learn:"Responsabilité, cohésion, discipline et équilibre entre sport et école.",search:"Coach Carter 2005 film streaming légal France"},
+ {id:"white",title:"Les Blancs ne savent pas sauter",original:"White Men Can't Jump",year:1992,emoji:"🔥",level:"Streetball & confiance",pitch:"Deux joueurs aux styles différents s'associent sur les terrains de streetball de Los Angeles, entre défis, adresse et provocations.",learn:"Le un-contre-un, le trash-talk, la lecture du jeu et le respect.",search:"White Men Can't Jump 1992 film streaming légal France"},
+ {id:"space",title:"Space Jam",original:"Space Jam",year:1996,emoji:"👽",level:"NBA & pop culture",pitch:"Michael Jordan fait équipe avec les Looney Tunes dans un match complètement fou contre les Monstars.",learn:"Une icône NBA, l'imaginaire des années 1990 et la culture populaire.",search:"Space Jam 1996 film streaming légal France"},
+ {id:"air",title:"Air",original:"Air",year:2023,emoji:"👟",level:"Histoire & business",pitch:"Le film raconte les négociations qui ont conduit à un partenariat historique entre Nike et le jeune Michael Jordan.",learn:"Marketing sportif, négociation et naissance d'une ligne de chaussures iconique.",search:"Air 2023 film streaming légal France"},
+ {id:"game",title:"He Got Game",original:"He Got Game",year:1998,emoji:"🎯",level:"Talent & pression",pitch:"Un jeune espoir du basket doit choisir son avenir alors que recruteurs, entourage et ambitions se disputent son attention.",learn:"Recrutement universitaire américain, pression médiatique et choix personnels.",search:"He Got Game 1998 film streaming légal France"},
+ {id:"glory",title:"Les Chemins du triomphe",original:"Glory Road",year:2006,emoji:"🏆",level:"Histoire & collectif",pitch:"Inspiré de l'équipe universitaire Texas Western de 1966, le film aborde le racisme et un moment marquant de l'histoire du basket universitaire.",learn:"Histoire du basket, courage, inclusion et force du collectif.",search:"Glory Road 2006 film streaming légal France"}
+];
+const questions = [
+ {q:"Dans quel film Michael Jordan joue-t-il avec les Looney Tunes ?",opts:["Air","Space Jam","Hustle","He Got Game"],a:1,why:"Space Jam (1996) mélange basket, animation et pop culture."},
+ {q:"Quel vrai joueur NBA incarne Bo Cruz dans Hustle ?",opts:["LeBron James","Anthony Edwards","Juancho Hernangómez","Stephen Curry"],a:2,why:"Juancho Hernangómez est un joueur professionnel espagnol. LeBron James est producteur du film."},
+ {q:"Qui joue le coach dans Coach Carter ?",opts:["Samuel L. Jackson","Denzel Washington","Will Smith","Adam Sandler"],a:0,why:"Samuel L. Jackson incarne Ken Carter, qui place aussi l'éducation au centre du projet."},
+ {q:"Quel joueur NBA joue Jesus Shuttlesworth dans He Got Game ?",opts:["Kobe Bryant","Ray Allen","Allen Iverson","Kevin Garnett"],a:1,why:"Ray Allen tient le rôle principal aux côtés de Denzel Washington."},
+ {q:"Air raconte surtout la naissance de quel partenariat ?",opts:["Adidas et Kobe Bryant","Nike et Michael Jordan","Puma et Shaquille O'Neal","Converse et LeBron James"],a:1,why:"Le film revient sur le pari commercial autour de Michael Jordan et de la ligne Air Jordan."},
+ {q:"Quel est le nom de l'équipe des Looney Tunes dans Space Jam ?",opts:["The Dream Team","Tune Squad","Monstars","The Bulls"],a:1,why:"La Tune Squad affronte les Monstars."},
+ {q:"Quel thème est au cœur de Glory Road ?",opts:["Le basket 3x3 olympique","L'histoire de Texas Western en 1966 et le racisme","La création de la NBA","Le streetball à New York"],a:1,why:"Le film s'inspire de l'équipe de Texas Western qui a remporté le titre NCAA en 1966."},
+ {q:"Dans White Men Can't Jump, quelle culture du basket est particulièrement mise en avant ?",opts:["Le streetball et le un-contre-un","Le basket fauteuil","Le basket 3x3 olympique uniquement","Le coaching vidéo NBA"],a:0,why:"Les terrains de rue, les duels et le trash-talk font partie de son identité."},
+ {q:"Dans Coach Carter, pourquoi l'entraîneur suspend-il les matchs de son équipe ?",opts:["Pour changer de ville","Pour imposer des exigences scolaires et de comportement","Parce que le gymnase est trop petit","Pour préparer un tournoi NBA"],a:1,why:"Le film met en scène les tensions entre résultats sportifs, études et responsabilité."},
+ {q:"Quel enseignement basket peut-on tirer de Hustle ?",opts:["Le talent suffit toujours","Le travail, la préparation et les opportunités comptent","Il ne faut jamais écouter un coach","Le scouting n'existe pas"],a:1,why:"Le parcours de Bo Cruz insiste sur l'entraînement, la confiance et la persévérance."}
+];
+let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","team":"","points":0,"watched":[],"quizBest":0}');
+function save(){localStorage.setItem("basketCinemaData",JSON.stringify(data));renderProfile();renderLeaderboard();}
+function showTab(id){document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));if(id==="profil")renderProfile();if(id==="classement")renderLeaderboard();}
+function renderMovies(){document.getElementById("movieGrid").innerHTML=movies.map(m=>`<article class="panel movie"><div class="poster">${m.emoji}</div><div class="movie-content"><div class="meta">${m.year} · ${m.level}</div><h3>${m.title}</h3><p><em>${m.original}</em></p><p>${m.pitch}</p><p><strong>À retenir :</strong> ${m.learn}</p><a class="btn secondary" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(m.search)}">Où le regarder ? ↗</a><p><label><input type="checkbox" style="width:auto;margin-right:7px" ${data.watched.includes(m.id)?"checked":""} onchange="toggleWatched('${m.id}',this.checked)"> J'ai vu ce film</label></p></div></article>`).join("");}
+function toggleWatched(id,checked){data.watched=data.watched.filter(x=>x!==id);if(checked)data.watched.push(id);save();renderMovies();}
+function renderProfile(){let name=document.getElementById("playerName");let team=document.getElementById("teamName");if(name&&document.activeElement!==name)name.value=data.name||"";if(team&&document.activeElement!==team)team.value=data.team||"";let pts=document.getElementById("profilePoints");if(pts)pts.textContent=data.points||0;let watched=document.getElementById("profileWatched");if(watched)watched.textContent=(data.watched||[]).length+"/7";let badge=document.getElementById("profileBadge");if(badge){let b=data.points>=80?"🏆 MVP du Cinéma Basket":data.points>=50?"🎬 Cinéphile All-Star":data.points>=20?"🧠 Coach en devenir":"🏀 Rookie Cinéphile";badge.textContent=b;}}
+document.getElementById("profileForm").addEventListener("submit",e=>{e.preventDefault();data.name=document.getElementById("playerName").value.trim().slice(0,24);data.team=document.getElementById("teamName").value.trim().slice(0,30);save();let s=document.getElementById("profileStatus");s.textContent="Profil enregistré sur cet appareil. Bon challenge "+data.name+" !";s.classList.remove("hidden");});
+let current=0,sessionScore=0,answered=false;
+function startQuiz(){current=0;sessionScore=0;answered=false;document.getElementById("liveScore").textContent="0";renderQuestion();}
+function renderQuestion(){let area=document.getElementById("quizArea");if(current>=questions.length){data.points=(data.points||0)+sessionScore;data.quizBest=Math.max(data.quizBest||0,sessionScore);save();area.innerHTML=`<h3>🏁 Quiz terminé !</h3><div class="score">${sessionScore}/100</div><p>${sessionScore>=80?"MVP ! Tu connais vraiment tes classiques.":sessionScore>=50?"Belle performance, continue à découvrir les films.":"Pas grave : découvre les films et retente ta chance !"} Ton score a été ajouté à ton profil.</p><button onclick="startQuiz()">Rejouer le quiz</button>`;return;}
+let q=questions[current];answered=false;area.innerHTML=`<div class="small">Question ${current+1} sur ${questions.length} · ${current<3?"ROOKIE":current<7?"ALL-STAR":"MVP"}</div><h3>${q.q}</h3><div id="options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="feedback"></div><button id="nextBtn" class="hidden" onclick="current++;renderQuestion()">Question suivante →</button>`;}
+function answer(i){if(answered)return;answered=true;let q=questions[current];document.querySelectorAll(".quiz-option").forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct");if(j===i&&i!==q.a)b.classList.add("wrong");});if(i===q.a){sessionScore+=10;document.getElementById("liveScore").textContent=sessionScore;}document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>${i===q.a?"✅ Bonne réponse !":"❌ Pas tout à fait."}</strong><br>${q.why}</div>`;document.getElementById("nextBtn").classList.remove("hidden");}
+function renderLeaderboard(){let el=document.getElementById("leaderboard");if(!el)return;el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · "+escapeHtml(data.team):""}</span><strong>${data.points||0} pts</strong></div><p class="small">Meilleur score au quiz : ${data.quizBest||0}/100 · Films vus : ${(data.watched||[]).length}/7</p>`;}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function shareProgress(){let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" ("+data.team+")":""}\nPoints : ${data.points||0}\nFilms vus : ${(data.watched||[]).length}/7\nÀ toi de jouer !`;if(navigator.share)navigator.share({title:"Challenge Basket & Cinéma",text:msg}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(msg).then(()=>alert("Progression copiée ! Colle-la dans le groupe de l'équipe."));else prompt("Copie ta progression :",msg);}
+function exportProgress(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ma-progression-basket-cinema.json";a.click();URL.revokeObjectURL(a.href);}
+renderMovies();renderProfile();renderLeaderboard();
+</script>
+</body>
+</html>
