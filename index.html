@@ -23,7 +23,10 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 .progress-bar-fill{background:linear-gradient(90deg,var(--orange),#ffaa5b);height:100%;transition:width .5s ease}
 .movie-card-disabled{opacity:0.6;filter:grayscale(0.4)}
 
-/* Modal d'identification plein écran */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.kpi-card{background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.kpi-value{font-size:1.8rem;font-weight:900;color:var(--orange)}
+
 #authModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(7,11,18,0.96);z-index:9999;display:grid;place-items:center;padding:20px}
 .auth-box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:30px;width:100%;max-width:480px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero-badge{display:none}.grid{grid-template-columns:1fr}.panel{padding:16px}nav button{flex:1}}
@@ -56,7 +59,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
    <label class="field">Ton équipe
     <input id="modalTeamDisplay" disabled value="-- Sélectionne ton prénom --" style="background:#18253a;color:var(--text)">
    </label>
-   <label class="field"><span id="pinInputLabel">Ton Code PIN (4 chiffres)</span>
+   <label class="field">Ton Code PIN (4 chiffres)
     <input type="password" id="modalPlayerPin" maxlength="4" placeholder="Ex: 1234">
    </label>
    <p class="small" id="pinHelpText" style="color:var(--muted)">Si c'est ta 1ère connexion, le code saisi deviendra ton code PIN secret.</p>
@@ -121,7 +124,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
  <nav aria-label="Navigation">
   <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films & Docus</button>
   <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
-  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Mon Profil</button>
+  <button class="tab" id="profileTabBtn" data-tab="profil" onclick="showTab('profil')">👤 Mon Profil</button>
   <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores Équipes</button>
  </nav>
 
@@ -140,8 +143,10 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
   </div>
  </section>
 
+ <!-- SECTION PROFIL / ADMIN (S'ADAPTE AU RÔLE) -->
  <section id="profil" class="view hidden">
-  <div class="panel">
+  <!-- VUE JOUEUR UNIQUE -->
+  <div class="panel" id="playerProfileContainer">
    <h2>Mon profil joueur</h2>
    <form id="profileForm" onsubmit="event.preventDefault()">
     <label class="field">Mon Prénom
@@ -151,7 +156,6 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
      <input id="teamName" disabled style="background:#18253a;color:var(--orange);font-weight:700">
     </label>
    </form>
-   <div id="profileStatus" class="feedback hidden"></div>
    <div class="panel" style="margin-top:18px">
     <h3>Ma progression personnelle</h3>
     <div class="row">
@@ -162,13 +166,41 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
    </div>
   </div>
 
-  <!-- PANNEAU RÉSERVÉ À L'ADMIN -->
+  <!-- TABLEAU DE BORD EXCLUSIF COACH VINCENT (ADMIN) -->
   <div class="panel hidden" id="adminPanelContainer">
-   <h2>🔑 Panneau Coach Vincent</h2>
-   <p>Suivi de l'émargement des 17 joueurs et outil de tirage au sort des équipes.</p>
-   <div class="row" style="margin-bottom:10px">
-    <div><span class="score" id="readyCount">0 / 17</span> <span class="small">joueurs prêts</span></div>
+   <h2>📊 Tableau de Bord — Coach Vincent</h2>
+   <p>Statistiques globales et pilotage du challenge en temps réel.</p>
+   
+   <!-- KPIs PRINCIPAUX -->
+   <div class="kpi-grid">
+    <div class="kpi-card">
+     <div class="small">Profils Remplis</div>
+     <div class="kpi-value" id="adminKpiProfiles">0 / 17</div>
+    </div>
+    <div class="kpi-card">
+     <div class="small">Total Visionnages</div>
+     <div class="kpi-value" id="adminKpiViews">0</div>
+    </div>
+    <div class="kpi-card">
+     <div class="small">Quiz Tentés</div>
+     <div class="kpi-value" id="adminKpiQuizAttempts">0</div>
+    </div>
+    <div class="kpi-card">
+     <div class="small">Équipe Leader</div>
+     <div class="kpi-value" id="adminKpiTopTeam" style="font-size:1.2rem">-</div>
+    </div>
    </div>
+
+   <hr style="border-color:var(--line);margin:20px 0">
+
+   <!-- SUIVI PAR FILM -->
+   <h3>🎬 Nombre de lectures par film</h3>
+   <div id="adminMovieStatsTable" style="margin-bottom:20px"></div>
+
+   <hr style="border-color:var(--line);margin:20px 0">
+
+   <!-- ÉMARGEMENT ET TIRAGE AU SORT -->
+   <h3>👥 Émargement des 17 Joueurs</h3>
    <div id="checkGrid" class="player-check-grid"></div>
 
    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
@@ -318,7 +350,6 @@ function onModalPlayerSelect(){
 
  displayTeam.value = getTeamForPlayer(pName);
 
- // Détections si le profil a déjà un PIN enregistré
  if(playerPins[pName]){
   displayStatus.value = "🔒 Profil déjà créé";
   displayStatus.style.color = "var(--green)";
@@ -337,14 +368,12 @@ function loginAsPlayer(){
  if(!name){ alert("Veuillez sélectionner votre prénom !"); return; }
  if(!pin || pin.length < 4){ alert("Veuillez entrer un code PIN à 4 chiffres !"); return; }
 
- // Contrôle du PIN : Création ou Vérification
  if(playerPins[name]){
   if(playerPins[name] !== pin){
    alert("❌ Code PIN incorrect pour " + name + " !");
    return;
   }
  } else {
-  // 1ère connexion : Verrouillage du PIN
   playerPins[name] = pin;
  }
 
@@ -373,7 +402,7 @@ function resetPlayerPin(playerName){
  if(confirm(`Voulez-vous réinitialiser le code PIN de ${playerName} ?`)){
   delete playerPins[playerName];
   save();
-  alert(`Code PIN de ${playerName} réinitialisé ! Il pourra choisir un nouveau PIN.`);
+  alert(`Code PIN de ${playerName} réinitialisé !`);
  }
 }
 
@@ -389,6 +418,8 @@ function checkSession(){
  let modal = document.getElementById("authModal");
  let badge = document.getElementById("userSessionBadge");
  let adminPanel = document.getElementById("adminPanelContainer");
+ let playerPanel = document.getElementById("playerProfileContainer");
+ let profileTabBtn = document.getElementById("profileTabBtn");
 
  if(!session){
   modal.classList.remove("hidden");
@@ -399,11 +430,16 @@ function checkSession(){
  modal.classList.add("hidden");
  if(session.role === 'admin'){
   badge.textContent = "🔑 Mode Coach Vincent";
+  if(profileTabBtn) profileTabBtn.textContent = "📊 Tableau de Bord";
   if(adminPanel) adminPanel.classList.remove("hidden");
+  if(playerPanel) playerPanel.classList.add("hidden");
  } else {
   data.team = getTeamForPlayer(data.name);
   badge.textContent = `👤 ${session.name} (${data.team})`;
+  if(profileTabBtn) profileTabBtn.textContent = "👤 Mon Profil";
   if(adminPanel) adminPanel.classList.add("hidden");
+  if(playerPanel) playerPanel.classList.remove("hidden");
+  
   let inputName = document.getElementById("displayPlayerName");
   let inputTeam = document.getElementById("teamName");
   if(inputName) inputName.value = data.name;
@@ -418,6 +454,7 @@ function renderAll(){
  renderMovies();
  renderProfile();
  renderLeaderboard();
+ renderAdminDashboard();
 }
 
 function renderHomeProgress(){
@@ -485,6 +522,57 @@ function renderChecklist(){
  if(cnt) cnt.textContent = `${readyPlayers.length} / ${ROSTER.length}`;
 }
 
+function renderAdminDashboard(){
+ if(!session || session.role !== 'admin') return;
+
+ // KPI 1: Profils créés
+ document.getElementById("adminKpiProfiles").textContent = `${readyPlayers.length} / ${ROSTER.length}`;
+
+ // KPI 2: Total Visionnages
+ let totalViews = 0;
+ Object.keys(teamsData).forEach(tName => {
+  Object.keys(teamsData[tName]).forEach(mName => {
+   totalViews += (teamsData[tName][mName].watchedList || []).length;
+  });
+ });
+ document.getElementById("adminKpiViews").textContent = totalViews;
+
+ // KPI 3: Total Tentatives de Quiz
+ let totalQuizAttempts = Object.values(teamAttempts).reduce((acc, v) => acc + v, 0);
+ document.getElementById("adminKpiQuizAttempts").textContent = totalQuizAttempts;
+
+ // KPI 4: Équipe Leader
+ let topTeam = "-";
+ let maxPts = -1;
+ Object.keys(teamsData).forEach(tName => {
+  let tPts = Object.values(teamsData[tName]).reduce((acc, m) => acc + (m.points || 0), 0);
+  if(tPts > maxPts){
+   maxPts = tPts;
+   topTeam = tName;
+  }
+ });
+ document.getElementById("adminKpiTopTeam").textContent = topTeam;
+
+ // Tableau du nombre de lectures par film
+ let tableEl = document.getElementById("adminMovieStatsTable");
+ if(tableEl){
+  tableEl.innerHTML = movies.map(m => {
+   let viewCount = 0;
+   Object.keys(teamsData).forEach(tName => {
+    Object.keys(teamsData[tName]).forEach(mName => {
+     if((teamsData[tName][mName].watchedList || []).includes(m.id)) viewCount++;
+    });
+   });
+   return `
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem">
+     <span>${m.emoji} <strong>${m.title}</strong></span>
+     <strong style="color:var(--orange)">${viewCount} visionnage(s)</strong>
+    </div>
+   `;
+  }).join("");
+ }
+}
+
 function showTab(id){
  document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
@@ -518,6 +606,24 @@ function renderMovies(){
   let forceCheckAndDisable = isMaxAttempts && unlocked;
   let isChecked = forceCheckAndDisable || data.watched.includes(m.id);
 
+  // Texte d'explication clair sous la case
+  let statusText = "";
+  let statusColor = "var(--muted)";
+
+  if(forceCheckAndDisable){
+   statusText = "🔒 Quiz terminé (2/2 tentatives utilisées)";
+   statusColor = "var(--orange)";
+  } else if(unlocked){
+   statusText = "✅ Quiz débloqué pour ton équipe !";
+   statusColor = "var(--green)";
+  } else if(isChecked){
+   statusText = "⏳ Tu as vu ce film ! En attente qu'un 2ème coéquipier le coche aussi...";
+   statusColor = "var(--orange)";
+  } else {
+   statusText = "🔒 Cocher « J'ai vu ce film » + 1 coéquipier requis pour débloquer le quiz";
+   statusColor = "var(--muted)";
+  }
+
   return `
   <article class="panel movie ${forceCheckAndDisable ? 'movie-card-disabled' : ''}">
    <div class="poster">${m.emoji}</div>
@@ -533,9 +639,7 @@ function renderMovies(){
       <input type="checkbox" style="width:auto;margin-right:7px" ${isChecked?"checked":""} ${(!hasProfile || forceCheckAndDisable)?"disabled":""} onchange="toggleWatched('${m.id}',this.checked)"> J'ai vu ce film / docu
      </label>
     </p>
-    <p class="small" style="color:${forceCheckAndDisable?'var(--orange)':unlocked?'var(--green)':'var(--muted)'}">
-     ${forceCheckAndDisable ? '🔒 Quiz terminé (2/2 tentatives utilisées)' : unlocked ? '✅ Débloqué pour le quiz de l\'équipe (≥ 2 vus)' : '🔒 En attente d\'un 2ème coéquipier (1/2 min)'}
-    </p>
+    <p class="small" style="color:${statusColor}">${statusText}</p>
    </div>
   </article>`;
  }).join("");
