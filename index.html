@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#101827">
 <title>Basket & Cinéma — Challenge Vacances</title>
 <style>
-:root{--bg:#0b1220;--panel:#121d30;--panel2:#19263b;--text:#f5f7fb;--muted:#aab6c9;--orange:#ff8a26;--line:#2b3a52;--green:#7ee0b5}
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#19263b;--text:#f5f7fb;--muted:#aab6c9;--orange:#ff8a26;--line:#2b3a52;--green:#7ee0b5;--red:#ff5c5c}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#26344b 0,#0b1220 42%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
 header{padding:28px 18px 20px;max-width:1100px;margin:auto} .eyebrow{color:var(--orange);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}
 h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.4rem 0}h2{margin:.2rem 0 1rem}p{color:var(--muted);margin:.45rem 0 1rem}
 main{max-width:1100px;margin:auto;padding:0 18px 50px}.hero{background:linear-gradient(135deg,#19263b,#111a2b);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:center}
 .hero-badge{font-size:4rem;text-align:center}.tag{display:inline-block;background:#2b3a52;color:#dce7f8;padding:5px 9px;border-radius:999px;font-size:.8rem;margin:3px}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;border-radius:12px;background:var(--orange);color:#1b140d;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.btn.secondary{background:#26364e;color:var(--text);border:1px solid #3a4b66}button:disabled{opacity:.45;cursor:not-allowed}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;border-radius:12px;background:var(--orange);color:#1b140d;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.btn.secondary{background:#26364e;color:var(--text);border:1px solid #3a4b66}button.danger,.btn.danger{background:var(--red);color:#fff}button:disabled{opacity:.45;cursor:not-allowed}
 .tab{background:#18253a;color:var(--muted);border:1px solid var(--line);padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
 .panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100% !important;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
 .team-card{background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
@@ -205,6 +205,15 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     <button class="secondary" onclick="runDraft(true)">Forcer le tirage</button>
    </div>
    <div id="draftResults" style="margin-top:16px"></div>
+
+   <hr style="border-color:var(--line);margin:30px 0 20px">
+
+   <!-- BOUTON DE RÉINITIALISATION GLOBALE (POUR NETTOYER LES TESTS) -->
+   <div style="background:#201418;border:1px solid #5c2025;padding:16px;border-radius:12px">
+    <h3 style="color:var(--red);margin-top:0">⚠️ Zone de Maintenance</h3>
+    <p class="small">Efface l'intégralité des données de test (profils, films vus, scores et PINs) pour remettre l'application entièrement à zéro avant le lancement officiel.</p>
+    <button class="danger" onclick="resetAllApplicationData()">🗑️ Réinitialiser TOUTES les données de l'application</button>
+   </div>
   </div>
  </section>
 
@@ -393,7 +402,6 @@ function loginAsAdmin(){
  session = { role: 'admin', name: 'Coach Vincent' };
  save();
  checkSession();
- // Redirection immédiate sur l'onglet Tableau de bord pour le Coach
  showTab('profil');
 }
 
@@ -402,6 +410,15 @@ function resetPlayerPin(playerName){
   delete playerPins[playerName];
   save();
   alert(`Code PIN de ${playerName} réinitialisé !`);
+ }
+}
+
+// Fonction de remise à zéro totale de l'application
+function resetAllApplicationData(){
+ if(confirm("⚠️ Êtes-vous ABSOLUMENT SÛR de vouloir effacer toutes les données de test ? (Inscriptions, scores, équipes et PINs seront supprimés)")){
+  localStorage.clear();
+  alert("🧹 Toutes les données de l'application ont été réinitialisées !");
+  location.reload();
  }
 }
 
