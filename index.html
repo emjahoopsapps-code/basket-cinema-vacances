@@ -208,7 +208,6 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
    <hr style="border-color:var(--line);margin:30px 0 20px">
 
-   <!-- BOUTON DE RÉINITIALISATION GLOBALE (POUR NETTOYER LES TESTS) -->
    <div style="background:#201418;border:1px solid #5c2025;padding:16px;border-radius:12px">
     <h3 style="color:var(--red);margin-top:0">⚠️ Zone de Maintenance</h3>
     <p class="small">Efface l'intégralité des données de test (profils, films vus, scores et PINs) pour remettre l'application entièrement à zéro avant le lancement officiel.</p>
@@ -236,11 +235,13 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
 <script>
 const CORRECT_ADMIN_PIN = "0926"; // Code PIN Admin (Coach Vincent)
+
+// Liste triée par ordre alphabétique
 const ROSTER = [
- "Lùca", "Axel", "Hugo", "Sacha R", "Edouard", "Samuel", 
- "Raphaël", "Nolan", "Kevin", "Lucas", "Ange", "Sacha C", 
- "Adam", "Pablo", "Nelio", "Gabriel", "Nathan"
-];
+ "Adam", "Ange", "Axel", "Edouard", "Gabriel", "Hugo", 
+ "Kevin", "Lucas", "Lùca", "Nathan", "Nelio", "Nolan", 
+ "Pablo", "Raphaël", "Samuel", "Sacha C", "Sacha R"
+].sort((a,b) => a.localeCompare(b, 'fr', {sensitivity: 'base'}));
 
 const movies = [
  {id:"hustle",title:"Le Haut du panier",original:"Hustle",year:2022,emoji:"🏀",level:"Détection & mental",pitch:"Un recruteur de basket découvre un joueur talentueux et tente de lui ouvrir les portes de la NBA.",learn:"Le scouting, la préparation et la persévérance.",search:"Hustle 2022 film streaming légal France"},
@@ -304,19 +305,33 @@ const baseQuestions = [
 ];
 
 let session = JSON.parse(localStorage.getItem("basketCinemaSession") || 'null');
-let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","team":"","points":0,"watched":[],"quizBest":0}');
+let data = { name: "", team: "", points: 0, watched: [], quizBest: 0 };
 let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]');
 let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
 let teamAttempts = JSON.parse(localStorage.getItem("basketCinemaTeamAttempts") || '{}');
 let playerPins = JSON.parse(localStorage.getItem("basketCinemaPlayerPins") || '{}');
 
+function loadPlayerData(pName) {
+ if (!pName) {
+  return { name: "", team: "", points: 0, watched: [], quizBest: 0 };
+ }
+ return JSON.parse(localStorage.getItem("basketCinemaData_" + pName) || JSON.stringify({ name: pName, team: "", points: 0, watched: [], quizBest: 0 }));
+}
+
+function savePlayerData(pName) {
+ if (!pName) return;
+ localStorage.setItem("basketCinemaData_" + pName, JSON.stringify(data));
+}
+
 function save(){
- localStorage.setItem("basketCinemaSession",JSON.stringify(session));
- localStorage.setItem("basketCinemaData",JSON.stringify(data));
- localStorage.setItem("basketCinemaReady",JSON.stringify(readyPlayers));
- localStorage.setItem("basketCinemaTeams",JSON.stringify(teamsData));
- localStorage.setItem("basketCinemaTeamAttempts",JSON.stringify(teamAttempts));
- localStorage.setItem("basketCinemaPlayerPins",JSON.stringify(playerPins));
+ localStorage.setItem("basketCinemaSession", JSON.stringify(session));
+ localStorage.setItem("basketCinemaReady", JSON.stringify(readyPlayers));
+ localStorage.setItem("basketCinemaTeams", JSON.stringify(teamsData));
+ localStorage.setItem("basketCinemaTeamAttempts", JSON.stringify(teamAttempts));
+ localStorage.setItem("basketCinemaPlayerPins", JSON.stringify(playerPins));
+ if (session && session.role === 'player' && data.name) {
+  savePlayerData(data.name);
+ }
  renderAll();
 }
 
@@ -384,6 +399,7 @@ function loginAsPlayer(){
  }
 
  session = { role: 'player', name: name };
+ data = loadPlayerData(name);
  data.name = name;
  data.team = getTeamForPlayer(name);
 
@@ -413,11 +429,10 @@ function resetPlayerPin(playerName){
  }
 }
 
-// Fonction de remise à zéro totale de l'application
 function resetAllApplicationData(){
- if(confirm("⚠️ Êtes-vous ABSOLUMENT SÛR de vouloir effacer toutes les données de test ? (Inscriptions, scores, équipes et PINs seront supprimés)")){
+ if(confirm("⚠️ Êtes-vous ABSOLUMENT SÛR de vouloir effacer toutes les données de test ?")){
   localStorage.clear();
-  alert("🧹 Toutes les données de l'application ont été réinitialisées !");
+  alert("🧹 Toutes les données ont été réinitialisées !");
   location.reload();
  }
 }
@@ -450,6 +465,7 @@ function checkSession(){
   if(adminPanel) adminPanel.classList.remove("hidden");
   if(playerPanel) playerPanel.classList.add("hidden");
  } else {
+  data = loadPlayerData(session.name);
   data.team = getTeamForPlayer(data.name);
   badge.textContent = `👤 ${session.name} (${data.team})`;
   if(profileTabBtn) profileTabBtn.textContent = "👤 Mon Profil";
@@ -615,7 +631,7 @@ function renderMovies(){
  grid.innerHTML = movies.map(m => {
   let unlocked = isMovieUnlockedForTeam(m.id);
   let forceCheckAndDisable = isMaxAttempts && unlocked;
-  let isChecked = forceCheckAndDisable || data.watched.includes(m.id);
+  let isChecked = forceCheckAndDisable || (data.watched && data.watched.includes(m.id));
 
   let statusText = "";
   let statusColor = "var(--muted)";
@@ -667,6 +683,7 @@ function toggleWatched(id,checked){
   renderMovies();
   return;
  }
+ if(!data.watched) data.watched = [];
  data.watched=data.watched.filter(x=>x!==id);
  if(checked) data.watched.push(id);
  syncPlayerToTeams();
@@ -693,7 +710,7 @@ function renderProfile(){
 function syncPlayerToTeams(){
  if(!data.team || !data.name || data.team.includes("Non attribuée")) return;
  if(!teamsData[data.team]) teamsData[data.team] = {};
- teamsData[data.team][data.name] = { points: data.points || 0, watchedList: [...data.watched] };
+ teamsData[data.team][data.name] = { points: data.points || 0, watchedList: [...(data.watched||[])] };
 }
 
 function runDraft(force){
@@ -734,7 +751,8 @@ function runDraft(force){
  Object.keys(generatedTeams).forEach(tName => {
   teamsData[tName] = {};
   generatedTeams[tName].forEach(p => {
-   teamsData[tName][p] = { points: 0, watchedList: [] };
+   let pData = loadPlayerData(p);
+   teamsData[tName][p] = { points: pData.points || 0, watchedList: pData.watched || [] };
    if(p === data.name){
     data.team = tName;
    }
@@ -908,7 +926,7 @@ function exportProgress(){
 }
 
 window.onload = function(){
- session = null; // Ramener systématiquement sur la modale d'identification
+ session = null;
  checkSession();
 }
 </script>
