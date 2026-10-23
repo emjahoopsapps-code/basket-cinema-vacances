@@ -14,7 +14,11 @@ main{max-width:1100px;margin:auto;padding:0 18px 50px}.hero{background:linear-gr
 .hero-badge{font-size:4rem;text-align:center}.tag{display:inline-block;background:#2b3a52;color:#dce7f8;padding:5px 9px;border-radius:999px;font-size:.8rem;margin:3px}
 nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;border-radius:12px;background:var(--orange);color:#1b140d;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.btn.secondary{background:#26364e;color:var(--text);border:1px solid #3a4b66}button:disabled{opacity:.45;cursor:not-allowed}
 .tab{background:#18253a;color:var(--muted);border:1px solid var(--line)}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
-.panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100%;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
+.panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100%;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
+.team-card{background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.player-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:14px 0}
+.player-check-item{background:#0c1524;border:1px solid #3a4b66;padding:8px 10px;border-radius:8px;font-size:.88rem;display:flex;align-items:center;gap:8px}
+.player-check-item.ready{border-color:var(--green);background:#102b26}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero-badge{display:none}.grid{grid-template-columns:1fr}.panel{padding:16px}nav button{flex:1}}
 </style>
 </head>
@@ -23,48 +27,84 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
  <div class="eyebrow">🏀 Le défi des vacances</div>
  <h1>Basket <span style="color:var(--orange)">&</span> Cinéma</h1>
  <p>Découvre les films et documentaires qui ont marqué la culture basket. Regarde, joue, marque des points et défie tes coéquipiers.</p>
- <span class="tag">14–18 ans</span><span class="tag">Solo ou en équipe</span><span class="tag">100 % depuis ton téléphone</span>
+ <span class="tag">17 Joueurs</span><span class="tag">En équipe de 3+</span><span class="tag">100 % sur mobile</span>
 </header>
 <main>
  <section class="hero">
-  <div><h2>Prêt à devenir le MVP du cinéma basket ?</h2><p>Choisis ton profil, découvre la sélection, puis lance le quiz. Tes résultats sont enregistrés sur cet appareil.</p><button onclick="showTab('profil')">Créer mon profil →</button></div>
+  <div><h2>Prêt à devenir le MVP du cinéma basket ?</h2><p>Valide ton profil, suis la création des équipes, regarde les œuvres, puis défie les autres groupes sur le quiz !</p><button onclick="showTab('profil')">Créer mon profil →</button></div>
   <div class="hero-badge" aria-hidden="true">🎬🏀</div>
  </section>
  <nav aria-label="Navigation">
   <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films & Docus</button>
   <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
-  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Mon profil</button>
-  <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores</button>
+  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Profil & Draft</button>
+  <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores Équipes</button>
  </nav>
  <section id="films" class="view">
-  <h2>À découvrir (8 titres)</h2><p>Lis le pitch, regarde l'œuvre sur une plateforme, puis coche « Vu » pour débloquer ses 5 questions de quiz.</p>
+  <h2>À découvrir (8 titres)</h2><p>Lis le pitch, regarde l'œuvre, puis coche « Vu » pour débloquer ses questions de quiz.</p>
   <div id="movieGrid" class="grid"></div>
   <div class="notice" style="margin-top:16px">Les disponibilités changent selon le pays et la date. Les liens de recherche servent à trouver une offre légale ; cette application ne diffuse aucun film.</div>
  </section>
  <section id="quiz" class="view hidden">
   <div class="panel">
-   <div class="row"><div><div class="eyebrow">Challenge individuel</div><h2 id="quizTitle">Quiz basket & cinéma</h2></div><div style="text-align:right"><div class="score" id="liveScore">0</div><div class="small">points gagnés ici</div></div></div>
-   <p id="quizIntro">Les questions se débloquent au fur et à mesure des films marqués comme « Vus » dans l'onglet Films !</p>
-   <div id="quizArea"><button onclick="startQuiz()">Lancer le quiz</button></div>
+   <div class="row"><div><div class="eyebrow">Challenge par équipe</div><h2 id="quizTitle">Quiz basket & cinéma</h2></div><div style="text-align:right"><div class="score" id="liveScore">0</div><div class="small">points gagnés ici</div></div></div>
+   <p id="quizIntro">Chaque équipe a un quiz unique (questions et réponses mélangées). Collabore avec tes coéquipiers !</p>
+   <div id="quizArea"><button onclick="startQuiz()">Lancer le quiz de mon équipe</button></div>
   </div>
  </section>
  <section id="profil" class="view hidden">
-  <div class="panel"><h2>Ton profil joueur</h2><p>Utilise un prénom ou un pseudo. Évite les informations personnelles comme ton nom complet ou ton adresse.</p>
+  <div class="panel"><h2>Ton profil joueur</h2>
    <form id="profileForm">
-    <label class="field">Prénom ou pseudo<input id="playerName" maxlength="24" placeholder="Ex. The Shooter" required></label>
-    <label class="field">Nom de ton équipe<input id="teamName" maxlength="30" placeholder="Ex. Les Panthers"></label>
+    <label class="field">Sélectionne ton prénom
+     <select id="playerName" required onchange="onPlayerSelectChange()">
+      <option value="">-- Choisis ton prénom --</option>
+     </select>
+    </label>
+    <label class="field">Nom de ton équipe (ou attribuée automatiquement)
+     <input id="teamName" maxlength="30" placeholder="Ex. Team Dunk" required>
+    </label>
     <button type="submit">Enregistrer mon profil</button>
    </form>
    <div id="profileStatus" class="feedback hidden"></div>
-   <div class="panel" style="margin-top:18px"><h3>Ma progression</h3><div class="row"><div><div class="score" id="profilePoints">0</div><div class="small">points cumulés sur cet appareil (max 100)</div></div><div><div class="score" id="profileWatched">0/8</div><div class="small">titres marqués comme vus</div></div></div><p id="profileBadge" class="pill">🏀 Rookie Cinéphile</p></div>
+   <div class="panel" style="margin-top:18px"><h3>Ma progression</h3><div class="row"><div><div class="score" id="profilePoints">0</div><div class="small">points personnels</div></div><div><div class="score" id="profileWatched">0/8</div><div class="small">titres vus</div></div></div><p id="profileBadge" class="pill">🏀 Rookie Cinéphile</p></div>
+  </div>
+
+  <!-- Module d'émargement et Tirage au sort des équipes -->
+  <div class="panel">
+   <h2>🎲 Émargement & Tirage au sort (17 Joueurs)</h2>
+   <p>Dès qu'un joueur crée son profil, sa case se coche automatiquement ci-dessous.</p>
+   <div class="row" style="margin-bottom:10px">
+    <div><span class="score" id="readyCount">0 / 17</span> <span class="small">joueurs prêts</span></div>
+   </div>
+   <div id="checkGrid" class="player-check-grid"></div>
+
+   <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+    <button id="draftBtn" onclick="runDraft(false)">Lancer le tirage au sort (Automatique)</button>
+    <button class="secondary" onclick="runDraft(true)">Forcer le tirage (Coach / Admin)</button>
+   </div>
+   <div id="draftResults" style="margin-top:16px"></div>
   </div>
  </section>
  <section id="classement" class="view hidden">
-  <div class="panel"><h2>Classement sur cet appareil</h2><p>Ce classement est local : il affiche les résultats enregistrés dans ce navigateur, pas encore ceux de tous les coéquipiers.</p><div id="leaderboard"></div><button class="secondary" onclick="shareProgress()">Partager ma progression</button> <button class="secondary" onclick="exportProgress()">Exporter mes résultats</button></div>
+  <div class="panel">
+   <h2>🏆 Classement des Équipes</h2>
+   <p>Les points individuels alimentent le score total de chaque équipe !</p>
+   <div id="teamLeaderboard"></div>
+   <hr style="border-color:var(--line);margin:20px 0">
+   <h3>Joueurs enregistrés sur cet appareil</h3>
+   <div id="leaderboard"></div>
+   <div style="margin-top:16px"><button class="secondary" onclick="shareProgress()">Partager ma progression</button> <button class="secondary" onclick="exportProgress()">Exporter mes résultats</button></div>
+  </div>
  </section>
 </main>
 <footer>Basket & Cinéma — Challenge Vacances · Créé pour jouer fair-play et découvrir la culture basket.</footer>
 <script>
+const ROSTER = [
+ "Lùca", "Axel", "Hugo", "Sacha R", "Edouard", "Samuel", 
+ "Raphaël", "Nolan", "Kevin", "Lucas", "Ange", "Sacha C", 
+ "Adam", "Pablo", "Nelio", "Gabriel", "Nathan"
+];
+
 const movies = [
  {id:"hustle",title:"Le Haut du panier",original:"Hustle",year:2022,emoji:"🏀",level:"Détection & mental",pitch:"Un recruteur de basket découvre un joueur talentueux et tente de lui ouvrir les portes de la NBA. Un film sur le travail, les opportunités et la persévérance.",learn:"Le scouting, la préparation et la capacité à rebondir après un échec.",search:"Hustle 2022 film streaming légal France"},
  {id:"coach",title:"Coach Carter",original:"Coach Carter",year:2005,emoji:"📋",level:"Leadership & discipline",pitch:"Un entraîneur impose des exigences fortes à son équipe et rappelle que les études et le respect comptent autant que les résultats sportifs.",learn:"Responsabilité, cohésion, discipline et équilibre entre sport et école.",search:"Coach Carter 2005 film streaming légal France"},
@@ -76,68 +116,112 @@ const movies = [
  {id:"shaqstyle",title:"Shaquille O'Neal impose son style",original:"Power Moves with Shaquille O'Neal",year:2025,emoji:"👔",level:"Business & Légende",pitch:"Docu-série captivant suivant Shaquille O'Neal et Allen Iverson dans leur mission d'entrepreneurs pour relancer la marque Reebok Basketball.",learn:"Leadership d'entreprise, sneakers culture, marketing et reconversion des légendes.",search:"Shaquille O'Neal impose son style Netflix streaming légal France"}
 ];
 
-// 40 questions (5 par film/docu). Valeur constante de 2.5 pts par question (Total pile = 100 pts)
-const questions = [
- // --- HUSTLE ---
- {movieId:"hustle", q:"Dans quelle ville espagnole le recruteur Stanley repère-t-il Bo Cruz sur un terrain de streetball ?", opts:["Barcelone","Madrid","Majorque","Valence"], a:2, pts:2.5, why:"Il le découvre lors d'un détour à Majorque."},
- {movieId:"hustle", q:"Quel vrai joueur professionnel de la NBA incarne le talentueux Bo Cruz ?", opts:["Juancho Hernangómez","Ricky Rubio","Pau Gasol","Luka Dončić"], a:0, pts:2.5, why:"C'est le joueur espagnol Juancho Hernangómez."},
- {movieId:"hustle", q:"Quel est le grand rival provocateur de Bo, incarné par Anthony Edwards ?", opts:["Vince Merrick","Kermit Wilts","Boogeyman","Tyler Smith"], a:1, pts:2.5, why:"Kermit Wilts utilise le trash-talk pour déstabiliser Bo."},
- {movieId:"hustle", q:"Quelle superstar NBA a coproduit le film avec Adam Sandler ?", opts:["LeBron James","Stephen Curry","Kevin Durant","Shaquille O'Neal"], a:0, pts:2.5, why:"LeBron James est producteur via SpringHill Company."},
- {movieId:"hustle", q:"[Précis] Quel exercice physique précis et éprouvant Stanley impose-t-il à Bo sur une côte en Pennsylvanie ?", opts:["Tirer un pneu d'automobile lesté avec un harnais","Monter des marches avec un sac de sable","Courir 10 km sous la pluie","Faire 100 dunks d'affilée"], a:0, pts:2.5, why:"L'exercice du pneu sur la côte est devenu la scène d'entraînement mythique du film."},
+const baseQuestions = [
+ {id:1, movieId:"hustle", q:"Dans quelle ville espagnole le recruteur Stanley repère-t-il Bo Cruz sur un terrain de streetball ?", opts:["Barcelone","Madrid","Majorque","Valence"], a:2, pts:2.5, why:"Il le découvre lors d'un détour à Majorque."},
+ {id:2, movieId:"hustle", q:"Quel vrai joueur professionnel de la NBA incarne le talentueux Bo Cruz ?", opts:["Juancho Hernangómez","Ricky Rubio","Pau Gasol","Luka Dončić"], a:0, pts:2.5, why:"C'est le joueur espagnol Juancho Hernangómez."},
+ {id:3, movieId:"hustle", q:"Quel est le grand rival provocateur de Bo, incarné par Anthony Edwards ?", opts:["Vince Merrick","Kermit Wilts","Boogeyman","Tyler Smith"], a:1, pts:2.5, why:"Kermit Wilts utilise le trash-talk pour déstabiliser Bo."},
+ {id:4, movieId:"hustle", q:"Quelle superstar NBA a coproduit le film avec Adam Sandler ?", opts:["LeBron James","Stephen Curry","Kevin Durant","Shaquille O'Neal"], a:0, pts:2.5, why:"LeBron James est producteur via SpringHill Company."},
+ {id:5, movieId:"hustle", q:"[Précis] Quel exercice physique précis et éprouvant Stanley impose-t-il à Bo sur une côte en Pennsylvanie ?", opts:["Tirer un pneu d'automobile lesté avec un harnais","Monter des marches avec un sac de sable","Courir 10 km sous la pluie","Faire 100 dunks d'affilée"], a:0, pts:2.5, why:"L'exercice du pneu sur la côte est devenu la scène d'entraînement mythique du film."},
 
- // --- COACH CARTER ---
- {movieId:"coach", q:"Pour quelle raison principale le coach Ken Carter ferme-t-il les portes du gymnase ?", opts:["Pour des résultats scolaires insuffisants","À cause de bagarres répétées","Pour retard à l'entraînement","Par manque de budget"], a:0, pts:2.5, why:"Il exige le respect du contrat académique passé avec ses joueurs."},
- {movieId:"coach", q:"Quel acteur légendaire incarne le charismatique entraîneur Ken Carter ?", opts:["Denzel Washington","Samuel L. Jackson","Morgan Freeman","Will Smith"], a:1, pts:2.5, why:"Samuel L. Jackson livre une prestation mémorable dans ce rôle."},
- {movieId:"coach", q:"Quel est le nom du lycée californien dans lequel se déroule l'histoire ?", opts:["Richmond High School","Lincoln High","Oakland Prep","St. Francis"], a:0, pts:2.5, why:"L'histoire se déroule au lycée public de Richmond."},
- {movieId:"coach", q:"Quelle est la devise / condition essentielle que fait signer le coach dans ses contrats ?", opts:["Avoir au moins 2.3 de moyenne et s'asseoir au premier rang","Gagner tous les matchs","Ne jamais parler aux arbitres","Porter un costume le week-end"], a:0, pts:2.5, why:"Le contrat impose l'excellence académique et la tenue adéquate."},
- {movieId:"coach", q:"[Précis] Combien de pompes Timo Cruz doit-il faire pour être réintégré dans l'équipe ?", opts:["500 pompes","1000 pompes","2500 pompes","5000 pompes"], a:2, pts:2.5, why:"Il doit accomplir le chiffre titanesque de 2500 pompes (et 1000 suicides), aidé par ses coéquipiers."},
+ {id:6, movieId:"coach", q:"Pour quelle raison principale le coach Ken Carter ferme-t-il les portes du gymnase ?", opts:["Pour des résultats scolaires insuffisants","À cause de bagarres répétées","Pour retard à l'entraînement","Par manque de budget"], a:0, pts:2.5, why:"Il exige le respect du contrat académique passé avec ses joueurs."},
+ {id:7, movieId:"coach", q:"Quel acteur légendaire incarne le charismatique entraîneur Ken Carter ?", opts:["Denzel Washington","Samuel L. Jackson","Morgan Freeman","Will Smith"], a:1, pts:2.5, why:"Samuel L. Jackson livre une prestation mémorable dans ce rôle."},
+ {id:8, movieId:"coach", q:"Quel est le nom du lycée californien dans lequel se déroule l'histoire ?", opts:["Richmond High School","Lincoln High","Oakland Prep","St. Francis"], a:0, pts:2.5, why:"L'histoire se déroule au lycée public de Richmond."},
+ {id:9, movieId:"coach", q:"Quelle est la devise / condition essentielle que fait signer le coach dans ses contrats ?", opts:["Avoir au moins 2.3 de moyenne et s'asseoir au premier rang","Gagner tous les matchs","Ne jamais parler aux arbitres","Porter un costume le week-end"], a:0, pts:2.5, why:"Le contrat impose l'excellence académique et la tenue adéquate."},
+ {id:10, movieId:"coach", q:"[Précis] Combien de pompes Timo Cruz doit-il faire pour être réintégré dans l'équipe ?", opts:["500 pompes","1000 pompes","2500 pompes","5000 pompes"], a:2, pts:2.5, why:"Il doit accomplir le chiffre titanesque de 2500 pompes (et 1000 suicides), aidé par ses coéquipiers."},
 
- // --- WHITE MEN CAN'T JUMP ---
- {movieId:"white", q:"Où se déroule la majorité des matchs de streetball du film ?", opts:["Venice Beach à Los Angeles","Rucker Park à New York","Chicago Loop","South Beach à Miami"], a:0, pts:2.5, why:"Les terrains mythiques de Venice Beach servent de décor principal."},
- {movieId:"white", q:"Quel tandem d'acteurs forme le duo iconique Billy Hoyle et Sidney Deane ?", opts:["Woody Harrelson et Wesley Snipes","Matt Damon et Will Smith","Keanu Reeves et Eddie Murphy","Brad Pitt et Martin Lawrence"], a:0, pts:2.5, why:"Woody Harrelson et Wesley Snipes crèvent l'écran par leur complicité."},
- {movieId:"white", q:"Quel célèbre jeu télévisé de culture générale Gloria (la compagne de Billy) rêve-t-elle de remporter ?", opts:["Jeopardy!","Le Juste Prix","Wheel of Fortune","Qui veut gagner des millions ?"], a:0, pts:2.5, why:"Elle étudie sans relâche pour participer à Jeopardy!."},
- {movieId:"white", q:"Sur quel aspect du jeu Billy parie-t-il souvent pour piéger ses adversaires sous-estimant son niveau ?", opts:["Sa capacité à shooter de très loin malgré son look d'amateur","Sa détente verticale exceptionnelle","Sa défense brutale","Ses passes aveugles"], a:0, pts:2.5, why:"Son look décontracté pousse les joueurs à le sous-estimer au tir."},
- {movieId:"white", q:"[Précis] Quel défi physique Billy réussit-il à la toute fin du film pour prouver à Sidney qu'il en est capable ?", opts:["Il réussit un dunk fracassant en match","Il marque du milieu du terrain les yeux fermés","Il réussit 20 lancers francs d'affilée","Il contres le meilleur joueur de la ville"], a:0, pts:2.5, why:"Billy claque enfin un dunk symbolique à la fin du match décisif."},
+ {id:11, movieId:"white", q:"Où se déroule la majorité des matchs de streetball du film ?", opts:["Venice Beach à Los Angeles","Rucker Park à New York","Chicago Loop","South Beach à Miami"], a:0, pts:2.5, why:"Les terrains mythiques de Venice Beach servent de décor principal."},
+ {id:12, movieId:"white", q:"Quel tandem d'acteurs forme le duo iconique Billy Hoyle et Sidney Deane ?", opts:["Woody Harrelson et Wesley Snipes","Matt Damon et Will Smith","Keanu Reeves et Eddie Murphy","Brad Pitt et Martin Lawrence"], a:0, pts:2.5, why:"Woody Harrelson et Wesley Snipes crèvent l'écran par leur complicité."},
+ {id:13, movieId:"white", q:"Quel célèbre jeu télévisé de culture générale Gloria (la compagne de Billy) rêve-t-elle de remporter ?", opts:["Jeopardy!","Le Juste Prix","Wheel of Fortune","Qui veut gagner des millions ?"], a:0, pts:2.5, why:"Elle étudie sans relâche pour participer à Jeopardy!."},
+ {id:14, movieId:"white", q:"Sur quel aspect du jeu Billy parie-t-il souvent pour piéger ses adversaires sous-estimant son niveau ?", opts:["Sa capacité à shooter de très loin malgré son look d'amateur","Sa détente verticale exceptionnelle","Sa défense brutale","Ses passes aveugles"], a:0, pts:2.5, why:"Son look décontracté pousse les joueurs à le sous-estimer au tir."},
+ {id:15, movieId:"white", q:"[Précis] Quel défi physique Billy réussit-il à la toute fin du film pour prouver à Sidney qu'il en est capable ?", opts:["Il réussit un dunk fracassant en match","Il marque du milieu du terrain les yeux fermés","Il réussit 20 lancers francs d'affilée","Il contres le meilleur joueur de la ville"], a:0, pts:2.5, why:"Billy claque enfin un dunk symbolique à la fin du match décisif."},
 
- // --- SPACE JAM ---
- {movieId:"space", q:"Quelle icône mondiale du basket fait équipe avec les Looney Tunes dans ce film de 1996 ?", opts:["Michael Jordan","Magic Johnson","Kobe Bryant","Shaquille O'Neal"], a:0, pts:2.5, why:"Michael Jordan est la star incontournable du film."},
- {movieId:"space", q:"Comment s'appelle l'équipe formée par Bugs Bunny, Lola Bunny et Michael Jordan ?", opts:["Tune Squad","Monstars","Looney 5","Bulls Squad"], a:0, pts:2.5, why:"La Tune Squad affronte les vilains Monstars."},
- {movieId:"space", q:"Quel est le pouvoir des extraterrestres Monstars ?", opts:["Ils ont volé le talent de superstars de la NBA","Ils sont invincibles par magie","Ils trhent avec la gravité","Ils lisent dans les pensées"], a:0, pts:2.5, why:"Ils ont absorbé les capacités de Barkley, Ewing, Bogues, Johnson et Bradley."},
- {movieId:"space", q:"Quel acteur comique célèbre vient aider la Tune Squad sur le terrain à la fin du match ?", opts:["Bill Murray","Jim Carrey","Adam Sandler","Robin Williams"], a:0, pts:2.5, why:"Bill Murray fait une apparition mémorable lors du match final."},
- {movieId:"space", q:"[Précis] Quelle est la véritable nature de la « Potion Magique » (Secret Stuff) donnée aux Looney Tunes à la mi-temps ?", opts:["De la simple eau du robinet","Un jus de carotte concentré","Une boisson énergisante rose","Un sérum d'espace"], a:0, pts:2.5, why:"C'est de l'eau ordinaire utilisée comme effet placebo pour leur redonner confiance."},
+ {id:16, movieId:"space", q:"Quelle icône mondiale du basket fait équipe avec les Looney Tunes dans ce film de 1996 ?", opts:["Michael Jordan","Magic Johnson","Kobe Bryant","Shaquille O'Neal"], a:0, pts:2.5, why:"Michael Jordan est la star incontournable du film."},
+ {id:17, movieId:"space", q:"Comment s'appelle l'équipe formée par Bugs Bunny, Lola Bunny et Michael Jordan ?", opts:["Tune Squad","Monstars","Looney 5","Bulls Squad"], a:0, pts:2.5, why:"La Tune Squad affronte les vilains Monstars."},
+ {id:18, movieId:"space", q:"Quel est le pouvoir des extraterrestres Monstars ?", opts:["Ils ont volé le talent de superstars de la NBA","Ils sont invincibles par magie","Ils trhent avec la gravité","Ils lisent dans les pensées"], a:0, pts:2.5, why:"Ils ont absorbé les capacités de Barkley, Ewing, Bogues, Johnson et Bradley."},
+ {id:19, movieId:"space", q:"Quel acteur comique célèbre vient aider la Tune Squad sur le terrain à la fin du match ?", opts:["Bill Murray","Jim Carrey","Adam Sandler","Robin Williams"], a:0, pts:2.5, why:"Bill Murray fait une apparition mémorable lors du match final."},
+ {id:20, movieId:"space", q:"[Précis] Quelle est la véritable nature de la « Potion Magique » (Secret Stuff) donnée aux Looney Tunes à la mi-temps ?", opts:["De la simple eau du robinet","Un jus de carotte concentré","Une boisson énergisante rose","Un sérum d'espace"], a:0, pts:2.5, why:"C'est de l'eau ordinaire utilisée comme effet placebo pour leur redonner confiance."},
 
- // --- AIR ---
- {movieId:"air", q:"Quelle grande marque d'équipements sportifs tente de signer le jeune Michael Jordan en 1984 ?", opts:["Nike","Adidas","Puma","Converse"], a:0, pts:2.5, why:"Le film retrace la création de la division basket de Nike autour de Jordan."},
- {movieId:"air", q:"Quel acteur joue le rôle de Sonny Vaccaro, le recruteur perspicace de chez Nike ?", opts:["Matt Damon","Ben Affleck","Jason Bateman","Chris Tucker"], a:0, pts:2.5, why:"Matt Damon incarne le visionnaire Sonny Vaccaro."},
- {movieId:"air", q:"Quelle personne clé dans l'entourage de Michael Jordan négocie d'une main de maître son contrat ?", opts:["Sa mère, Deloris Jordan","Son agent David Falk uniquement","Son père James Jordan","Son entraîneur universitaire"], a:0, pts:2.5, why:"Deloris Jordan impose des conditions financières inédites et révolutionnaires."},
- {movieId:"air", q:"Quel modèle de sneakers mythique est créé au cours de ces négociations ?", opts:["Air Jordan 1","Air Force 1","Superstar","Suede Classic"], a:0, pts:2.5, why:"La création de la Air Jordan 1 va bouleverser la culture de la sneaker."},
- {movieId:"air", q:"[Précis] Quelle clause financière révolutionnaire la mère de Jordan exige-t-elle d'obtenir sur chaque paire vendue ?", opts:["Un pourcentage sur les ventes de chaque chaussure Air Jordan","10 millions de dollars cash d'avance","Des actions gratuites Nike","Le contrôle total du design"], a:0, pts:2.5, why:"Elle exige un pourcentage sur chaque vente, créant un précédent historique dans le sport pro."},
+ {id:21, movieId:"air", q:"Quelle grande marque d'équipements sportifs tente de signer le jeune Michael Jordan en 1984 ?", opts:["Nike","Adidas","Puma","Converse"], a:0, pts:2.5, why:"Le film retrace la création de la division basket de Nike autour de Jordan."},
+ {id:22, movieId:"air", q:"Quel acteur joue le rôle de Sonny Vaccaro, le recruteur perspicace de chez Nike ?", opts:["Matt Damon","Ben Affleck","Jason Bateman","Chris Tucker"], a:0, pts:2.5, why:"Matt Damon incarne le visionnaire Sonny Vaccaro."},
+ {id:23, movieId:"air", q:"Quelle personne clé dans l'entourage de Michael Jordan négocie d'une main de maître son contrat ?", opts:["Sa mère, Deloris Jordan","Son agent David Falk uniquement","Son père James Jordan","Son entraîneur universitaire"], a:0, pts:2.5, why:"Deloris Jordan impose des conditions financières inédites et révolutionnaires."},
+ {id:24, movieId:"air", q:"Quel modèle de sneakers mythique est créé au cours de ces négociations ?", opts:["Air Jordan 1","Air Force 1","Superstar","Suede Classic"], a:0, pts:2.5, why:"La création de la Air Jordan 1 va bouleverser la culture de la sneaker."},
+ {id:25, movieId:"air", q:"[Précis] Quelle clause financière révolutionnaire la mère de Jordan exige-t-elle d'obtenir sur chaque paire vendue ?", opts:["Un pourcentage sur les ventes de chaque chaussure Air Jordan","10 millions de dollars cash d'avance","Des actions gratuites Nike","Le contrôle total du design"], a:0, pts:2.5, why:"Elle exige un pourcentage sur chaque vente, créant un précédent historique dans le sport pro."},
 
- // --- BLUE CHIPS ---
- {movieId:"bluechips", q:"Quel entraîneur volcanique et intègre de Western University est incarné par Nick Nolte ?", opts:["Pete Bell","Coach Carter","Bobby Knight","Don Haskins"], a:0, pts:2.5, why:"Nick Nolte incarne le charismatique Pete Bell."},
- {movieId:"bluechips", q:"Quel pivot géant et futur Hall of Famer NBA joue le rôle du jeune rookie Neon Boudeaux ?", opts:["Shaquille O'Neal","Alonzo Mourning","Patrick Ewing","David Robinson"], a:0, pts:2.5, why:"Shaquille O'Neal y joue son premier grand rôle au cinéma."},
- {movieId:"bluechips", q:"Quel meneur NBA d'exception (coéquipier de Shaq aux Magic) joue le rôle de Butch McRae ?", opts:["Anfernee 'Penny' Hardaway","Jason Kidd","Gary Payton","Steve Nash"], a:0, pts:2.5, why:"Penny Hardaway donne la réplique à Shaquille O'Neal."},
- {movieId:"bluechips", q:"Quel problème éthique majeur du sport universitaire américain est dénoncé dans le film ?", opts:["Le versement illégal d'argent et de cadeaux pour recruter des lycéens","Le dopage systématique","Les matchs truqués par les arbitres","La falsification des âges"], a:0, pts:2.5, why:"Les cadeaux en sous-main aux familles de recrues (boosters) sont au centre de l'intrigue."},
- {movieId:"bluechips", q:"[Précis] Que fait l'entraîneur Pete Bell lors de la conférence de presse après la grande victoire télévisée ?", opts:["Il avoue publiquement la corruption et démissionne en direct","Il insulte le président de l'université","Il annonce sa signature en NBA","Il refuse de parler aux journalistes"], a:0, pts:2.5, why:"Rongé par la culpabilité d'avoir triché, il déballe toute la vérité devant les caméras."},
+ {id:26, movieId:"bluechips", q:"Quel entraîneur volcanique et intègre de Western University est incarné par Nick Nolte ?", opts:["Pete Bell","Coach Carter","Bobby Knight","Don Haskins"], a:0, pts:2.5, why:"Nick Nolte incarne le charismatique Pete Bell."},
+ {id:27, movieId:"bluechips", q:"Quel pivot géant et futur Hall of Famer NBA joue le rôle du jeune rookie Neon Boudeaux ?", opts:["Shaquille O'Neal","Alonzo Mourning","Patrick Ewing","David Robinson"], a:0, pts:2.5, why:"Shaquille O'Neal y joue son premier grand rôle au cinéma."},
+ {id:28, movieId:"bluechips", q:"Quel meneur NBA d'exception (coéquipier de Shaq aux Magic) joue le rôle de Butch McRae ?", opts:["Anfernee 'Penny' Hardaway","Jason Kidd","Gary Payton","Steve Nash"], a:0, pts:2.5, why:"Penny Hardaway donne la réplique à Shaquille O'Neal."},
+ {id:29, movieId:"bluechips", q:"Quel problème éthique majeur du sport universitaire américain est dénoncé dans le film ?", opts:["Le versement illégal d'argent et de cadeaux pour recruter des lycéens","Le dopage systématique","Les matchs truqués par les arbitres","La falsification des âges"], a:0, pts:2.5, why:"Les cadeaux en sous-main aux familles de recrues (boosters) sont au centre de l'intrigue."},
+ {id:30, movieId:"bluechips", q:"[Précis] Que fait l'entraîneur Pete Bell lors de la conférence de presse après la grande victoire télévisée ?", opts:["Il avoue publiquement la corruption et démissionne en direct","Il insulte le président de l'université","Il annonce sa signature en NBA","Il refuse de parler aux journalistes"], a:0, pts:2.5, why:"Rongé par la culpabilité d'avoir triché, il déballe toute la vérité devant les caméras."},
 
- // --- GLORY ROAD ---
- {movieId:"glory", q:"Quelle université texane entre dans l'histoire du basket lors du championnat NCAA 1966 ?", opts:["Texas Western","UT Austin","Houston Cougars","Texas A&M"], a:0, pts:2.5, why:"L'équipe des Miners de Texas Western marque l'histoire du sport."},
- {movieId:"glory", q:"Quel est le nom du coach audacieux qui recrute sans tenir compte des barrières raciales de l'époque ?", opts:["Don Haskins","Ken Carter","John Wooden","Dean Smith"], a:0, pts:2.5, why:"Don Haskins fait le pari du talent et de la justice sociale."},
- {movieId:"glory", q:"Contre quelle université archi-favorite et conservatrice jouent-ils la grande finale ?", opts:["Kentucky","UCLA","Duke","North Carolina"], a:0, pts:2.5, why:"Ils affronte l'équipe de Kentucky menée par le coach Adolph Rupp."},
- {movieId:"glory", q:"Quel est le thème historique fondamental abordé tout au long du film ?", opts:["La lutte contre la ségrégation et le racisme dans le sport","L'invention du tir à trois points","Le passage du basket amateur au secteur privé","La rivalité entre deux villes"], a:0, pts:2.5, why:"Le film montre le courage de l'équipe face aux discriminations raciales."},
- {movieId:"glory", q:"[Précis] Quelle décision tactique et historique Don Haskins prend-il pour le 5 majeur de la finale nationale ?", opts:["Aligner un cinq majeur composé à 100 % de joueurs noirs","Jouer tout le match sans faire aucun remplacement","Commencer le match avec 5 meneurs de jeu","Refuser de faire un temps mort"], a:0, pts:2.5, why:"C'est la première fois dans l'histoire de la NCAA qu'un 5 majeur intégralement noir débute une finale."},
+ {id:31, movieId:"glory", q:"Quelle université texane entre dans l'histoire du basket lors du championnat NCAA 1966 ?", opts:["Texas Western","UT Austin","Houston Cougars","Texas A&M"], a:0, pts:2.5, why:"L'équipe des Miners de Texas Western marque l'histoire du sport."},
+ {id:32, movieId:"glory", q:"Quel est le nom du coach audacieux qui recrute sans tenir compte des barrières raciales de l'époque ?", opts:["Don Haskins","Ken Carter","John Wooden","Dean Smith"], a:0, pts:2.5, why:"Don Haskins fait le pari du talent et de la justice sociale."},
+ {id:33, movieId:"glory", q:"Contre quelle université archi-favorite et conservatrice jouent-ils la grande finale ?", opts:["Kentucky","UCLA","Duke","North Carolina"], a:0, pts:2.5, why:"Ils affronte l'équipe de Kentucky menée par le coach Adolph Rupp."},
+ {id:34, movieId:"glory", q:"Quel est le thème historique fondamental abordé tout au long du film ?", opts:["La lutte contre la ségrégation et le racisme dans le sport","L'invention du tir à trois points","Le passage du basket amateur au secteur privé","La rivalité entre deux villes"], a:0, pts:2.5, why:"Le film montre le courage de l'équipe face aux discriminations raciales."},
+ {id:35, movieId:"glory", q:"[Précis] Quelle décision tactique et historique Don Haskins prend-il pour le 5 majeur de la finale nationale ?", opts:["Aligner un cinq majeur composé à 100 % de joueurs noirs","Jouer tout le match sans faire aucun remplacement","Commencer le match avec 5 meneurs de jeu","Refuser de faire un temps mort"], a:0, pts:2.5, why:"C'est la première fois dans l'histoire de la NCAA qu'un 5 majeur intégralement noir débute une finale."},
 
- // --- SHAQUILLE O'NEAL IMPOSE SON STYLE ---
- {movieId:"shaqstyle", q:"Dans ce docu-série, quelle marque de sportswear mythique Shaq et Allen Iverson cherchent-ils à relancer ?", opts:["Reebok","Puma","AND1","Under Armour"], a:0, pts:2.5, why:"Ils prennent la direction de Reebok Basketball pour lui redonner son aura streetwear."},
- {movieId:"shaqstyle", q:"Quelle autre légende vivante du basket et icône des années 2000 s'associe à Shaq dans cette aventure ?", opts:["Allen Iverson","Tracy McGrady","Vince Carter","Dennis Rodman"], a:0, pts:2.5, why:"Allen Iverson co-dirige la branche basket avec Shaquille O'Neal."},
- {movieId:"shaqstyle", q:"Sur quelle plateforme de streaming ce documentaire passionnant est-il diffusé ?", opts:["Netflix","Prime Video","Disney+","Apple TV"], a:0, pts:2.5, why:"La série documentaire est produite et diffusée par Netflix."},
- {movieId:"shaqstyle", q:"Quel double rôle Shaq et Iverson occupent-ils au sein de l'entreprise ?", opts:["Dirigeants / Dirigeants de la division Basketball","Entraîneurs d'équipe","Mannequins pour les publicités","Designers textiles uniques"], a:0, pts:2.5, why:"Ils deviennent Présidents et Vice-Présidents de la division Basketball de la marque."},
- {movieId:"shaqstyle", q:"[Précis] Quel modèle de sneaker signature légendaire créé pour Iverson dans les années 90 est réédité dans la série ?", opts:["The Question / Answer","Shaq Attaq","Pump Omni Zone","Kamikaze"], a:0, pts:2.5, why:"Les modèles Answer / Question d'Allen Iverson font partie intégrante de leur stratégie de relance."}
+ {id:36, movieId:"shaqstyle", q:"Dans ce docu-série, quelle marque de sportswear mythique Shaq et Allen Iverson cherchent-ils à relancer ?", opts:["Reebok","Puma","AND1","Under Armour"], a:0, pts:2.5, why:"Ils prennent la direction de Reebok Basketball pour lui redonner son aura streetwear."},
+ {id:37, movieId:"shaqstyle", q:"Quelle autre légende vivante du basket et icône des années 2000 s'associe à Shaq dans cette aventure ?", opts:["Allen Iverson","Tracy McGrady","Vince Carter","Dennis Rodman"], a:0, pts:2.5, why:"Allen Iverson co-dirige la branche basket avec Shaquille O'Neal."},
+ {id:38, movieId:"shaqstyle", q:"Sur quelle plateforme de streaming ce documentaire passionnant est-il diffusé ?", opts:["Netflix","Prime Video","Disney+","Apple TV"], a:0, pts:2.5, why:"La série documentaire est produite et diffusée par Netflix."},
+ {id:39, movieId:"shaqstyle", q:"Quel double rôle Shaq et Iverson occupent-ils au sein de l'entreprise ?", opts:["Dirigeants / Dirigeants de la division Basketball","Entraîneurs d'équipe","Mannequins pour les publicités","Designers textiles uniques"], a:0, pts:2.5, why:"Ils deviennent Présidents et Vice-Présidents de la division Basketball de la marque."},
+ {id:40, movieId:"shaqstyle", q:"[Précis] Quel modèle de sneaker signature légendaire créé pour Iverson dans les années 90 est réédité dans la série ?", opts:["The Question / Answer","Shaq Attaq","Pump Omni Zone","Kamikaze"], a:0, pts:2.5, why:"Les modèles Answer / Question d'Allen Iverson font partie intégrante de leur stratégie de relance."}
 ];
 
 let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","team":"","points":0,"watched":[],"quizBest":0}');
-function save(){localStorage.setItem("basketCinemaData",JSON.stringify(data));renderProfile();renderLeaderboard();}
-function showTab(id){document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));if(id==="profil")renderProfile();if(id==="classement")renderLeaderboard();}
+let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]');
+let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
+
+function save(){
+ localStorage.setItem("basketCinemaData",JSON.stringify(data));
+ localStorage.setItem("basketCinemaReady",JSON.stringify(readyPlayers));
+ localStorage.setItem("basketCinemaTeams",JSON.stringify(teamsData));
+ renderProfile();
+ renderLeaderboard();
+ renderChecklist();
+}
+
+function initRosterDropdown(){
+ let sel = document.getElementById("playerName");
+ if(!sel) return;
+ sel.innerHTML = `<option value="">-- Choisis ton prénom --</option>` + 
+  ROSTER.map(p => `<option value="${p}">${p}</option>`).join("");
+ if(data.name) sel.value = data.name;
+}
+
+function renderChecklist(){
+ let grid = document.getElementById("checkGrid");
+ if(!grid) return;
+ grid.innerHTML = ROSTER.map(p => {
+  let isReady = readyPlayers.includes(p);
+  return `<div class="player-check-item ${isReady?'ready':''}">
+   <input type="checkbox" ${isReady?'checked':''} onchange="togglePlayerReady('${p}', this.checked)">
+   <span>${p}</span>
+  </div>`;
+ }).join("");
+ let cnt = document.getElementById("readyCount");
+ if(cnt) cnt.textContent = `${readyPlayers.length} / ${ROSTER.length}`;
+}
+
+function togglePlayerReady(name, checked){
+ readyPlayers = readyPlayers.filter(x=>x!==name);
+ if(checked) readyPlayers.push(name);
+ save();
+}
+
+function onPlayerSelectChange(){
+ let pName = document.getElementById("playerName").value;
+ if(pName && !readyPlayers.includes(pName)){
+  readyPlayers.push(pName);
+  save();
+ }
+}
+
+function showTab(id){
+ document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
+ if(id==="profil")renderProfile();
+ if(id==="classement")renderLeaderboard();
+}
 
 function renderMovies(){
  document.getElementById("movieGrid").innerHTML=movies.map(m=>`
@@ -163,6 +247,8 @@ function toggleWatched(id,checked){
 }
 
 function renderProfile(){
+ initRosterDropdown();
+ renderChecklist();
  let name=document.getElementById("playerName");
  let team=document.getElementById("teamName");
  if(name&&document.activeElement!==name)name.value=data.name||"";
@@ -180,20 +266,127 @@ function renderProfile(){
 
 document.getElementById("profileForm").addEventListener("submit",e=>{
  e.preventDefault();
- data.name=document.getElementById("playerName").value.trim().slice(0,24);
+ data.name=document.getElementById("playerName").value;
  data.team=document.getElementById("teamName").value.trim().slice(0,30);
+ if(data.name && !readyPlayers.includes(data.name)){
+  readyPlayers.push(data.name);
+ }
+ syncPlayerToTeams();
  save();
  let s=document.getElementById("profileStatus");
- s.textContent="Profil enregistré sur cet appareil. Bon challenge "+data.name+" !";
+ s.textContent="Profil enregistré ! Bienvenue "+data.name+" dans l'équipe "+data.team+" !";
  s.classList.remove("hidden");
 });
+
+function syncPlayerToTeams(){
+ if(!data.team || !data.name) return;
+ if(!teamsData[data.team]) teamsData[data.team] = {};
+ teamsData[data.team][data.name] = { points: data.points || 0, watched: (data.watched||[]).length };
+}
+
+// Fonction de tirage au sort des équipes
+function runDraft(force){
+ if(!force && readyPlayers.length < ROSTER.length){
+  alert(`Attention : seulement ${readyPlayers.length}/${ROSTER.length} joueurs ont créé leur profil. Vous pouvez attendre les autres ou cliquer sur "Forcer le tirage (Coach / Admin)".`);
+  return;
+ }
+
+ let pool = readyPlayers.length >= 3 ? [...readyPlayers] : [...ROSTER];
+ 
+ // Mélange de Fisher-Yates
+ for (let i = pool.length - 1; i > 0; i--) {
+  let j = Math.floor(Math.random() * (i + 1));
+  [pool[i], pool[j]] = [pool[j], pool[i]];
+ }
+
+ let teamNames = ["Team Dunk", "Team Crossover", "Team Clutch", "Team Alley-Oop", "Team Fastbreak"];
+ let generatedTeams = {};
+ 
+ // Distribution en équipes d'au moins 3 joueurs
+ let numTeams = Math.floor(pool.length / 3);
+ if(numTeams === 0) numTeams = 1;
+
+ for(let i=0; i<numTeams; i++){
+  generatedTeams[teamNames[i % teamNames.length]] = [];
+ }
+
+ pool.forEach((player, idx) => {
+  let targetTeam = teamNames[idx % numTeams];
+  generatedTeams[targetTeam].push(player);
+ });
+
+ let resDiv = document.getElementById("draftResults");
+ resDiv.innerHTML = "<h3>🎉 Résultat du tirage au sort des équipes :</h3>" + Object.keys(generatedTeams).map(tName => `
+  <div class="team-card">
+   <strong style="color:var(--orange)">🏀 ${tName}</strong> (${generatedTeams[tName].length} joueurs)
+   <div style="margin-top:4px">Membres : ${generatedTeams[tName].join(", ")}</div>
+  </div>
+ `).join("");
+
+ // Si le joueur actuel fait partie du tirage, on lui attribue automatiquement son équipe
+ Object.keys(generatedTeams).forEach(tName => {
+  if(!teamsData[tName]) teamsData[tName] = {};
+  generatedTeams[tName].forEach(p => {
+   if(!teamsData[tName][p]) teamsData[tName][p] = { points: 0, watched: 0 };
+   if(p === data.name){
+    data.team = tName;
+    document.getElementById("teamName").value = tName;
+   }
+  });
+ });
+ save();
+}
+
+function seededRandom(seed) {
+ var x = Math.sin(seed++) * 10000;
+ return x - Math.floor(x);
+}
+
+function stringToSeed(str) {
+ let hash = 0;
+ for (let i = 0; i < str.length; i++) {
+  hash = str.charCodeAt(i) + ((hash << 5) - hash);
+ }
+ return Math.abs(hash);
+}
+
+function getTeamUniqueQuestions(teamName) {
+ let filtered = baseQuestions.filter(q => data.watched.includes(q.movieId));
+ let seed = stringToSeed(teamName || "default");
+ let teamQs = JSON.parse(JSON.stringify(filtered));
+
+ for (let i = teamQs.length - 1; i > 0; i--) {
+  let j = Math.floor(seededRandom(seed + i) * (i + 1));
+  [teamQs[i], teamQs[j]] = [teamQs[j], teamQs[i]];
+ }
+
+ teamQs.forEach((q, qIdx) => {
+  let optsWithIdx = q.opts.map((o, idx) => ({ text: o, isCorrect: idx === q.a }));
+  for (let i = optsWithIdx.length - 1; i > 0; i--) {
+   let j = Math.floor(seededRandom(seed + qIdx + i) * (i + 1));
+   [optsWithIdx[i], optsWithIdx[j]] = [optsWithIdx[j], optsWithIdx[i]];
+  }
+  q.opts = optsWithIdx.map(o => o.text);
+  q.a = optsWithIdx.findIndex(o => o.isCorrect);
+ });
+
+ return teamQs;
+}
 
 let activeQuestions=[];
 let current=0,sessionScore=0,answered=false;
 
 function startQuiz(){
  let area=document.getElementById("quizArea");
- activeQuestions = questions.filter(q => data.watched.includes(q.movieId));
+ if(!data.team){
+  area.innerHTML=`
+   <div class="notice">⚠️ <strong>Équipe non renseignée !</strong><br>Rends-toi dans l'onglet <strong>👤 Profil & Draft</strong> pour enregistrer le nom de ton équipe avant de démarrer le quiz !</div>
+   <button style="margin-top:14px" onclick="showTab('profil')">Créer mon profil →</button>
+  `;
+  return;
+ }
+
+ activeQuestions = getTeamUniqueQuestions(data.team);
  
  if(activeQuestions.length === 0){
   area.innerHTML=`
@@ -215,12 +408,13 @@ function renderQuestion(){
  if(current>=activeQuestions.length){
   data.points=Math.min(100,(data.points||0)+sessionScore);
   data.quizBest=Math.max(data.quizBest||0,sessionScore);
+  syncPlayerToTeams();
   save();
   let maxPossible = activeQuestions.reduce((acc,q)=>acc+q.pts,0);
   area.innerHTML=`
-   <h3>🏁 Quiz terminé !</h3>
+   <h3>🏁 Quiz terminé pour l'équipe ${escapeHtml(data.team)} !</h3>
    <div class="score">${Math.round(sessionScore)} / ${Math.round(maxPossible)} pts</div>
-   <p>${sessionScore>=80?"MVP ! Tu connais vraiment tes classiques sur le bout des doigts !":sessionScore>=40?"Belle performance, continue de regarder des films pour marquer encore plus de points !":"Regarde d'autres films et docus dans la liste pour débloquer la suite du quiz !"} Ton score a été enregistré.</p>
+   <p>${sessionScore>=80?"MVP ! Tu fais honneur à ton équipe !":sessionScore>=40?"Belle performance ! Tes points ont été ajoutés au score de ton équipe !":"Débloque d'autres films avec tes coéquipiers pour marquer encore plus de points !"} Ton score a été enregistré.</p>
    <button onclick="startQuiz()">Rejouer le quiz</button>
   `;
   return;
@@ -229,7 +423,7 @@ function renderQuestion(){
  let q=activeQuestions[current];
  answered=false;
  area.innerHTML=`
-  <div class="small">Question ${current+1} sur ${activeQuestions.length} · <span style="color:var(--orange)">Valeur : ${q.pts} pts</span></div>
+  <div class="small">Équipe : <strong style="color:var(--orange)">${escapeHtml(data.team)}</strong> · Question ${current+1} sur ${activeQuestions.length} · <span style="color:var(--orange)">Valeur : ${q.pts} pts</span></div>
   <h3>${q.q}</h3>
   <div id="options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>
   <div id="feedback"></div>
@@ -255,25 +449,57 @@ function answer(i){
 }
 
 function renderLeaderboard(){
+ syncPlayerToTeams();
+ let teamEl = document.getElementById("teamLeaderboard");
+ if(teamEl){
+  let teamSummary = [];
+  Object.keys(teamsData).forEach(tName => {
+   let members = teamsData[tName];
+   let totalPts = 0;
+   let count = 0;
+   Object.keys(members).forEach(m => {
+    totalPts += members[m].points || 0;
+    count++;
+   });
+   teamSummary.push({ name: tName, totalPoints: totalPts, memberCount: count, avg: count ? totalPts / count : 0 });
+  });
+
+  teamSummary.sort((a,b) => b.totalPoints - a.totalPoints);
+
+  if(teamSummary.length === 0){
+   teamEl.innerHTML = `<p class="small">Aucune équipe enregistrée pour l'instant. Effectuez le tirage au sort ou créez un profil !</p>`;
+  } else {
+   teamEl.innerHTML = teamSummary.map((t, rank) => `
+    <div class="team-card">
+     <div class="row">
+      <div><strong>${rank===0?"🥇":rank===1?"🥈":rank===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberCount} joueurs)</div>
+      <div style="text-align:right"><strong style="color:var(--orange);font-size:1.2rem">${Math.round(t.totalPoints)} pts</strong></div>
+     </div>
+     <div class="small">Moyenne : ${Math.round(t.avg)} pts / joueur</div>
+    </div>
+   `).join("");
+  }
+ }
+
  let el=document.getElementById("leaderboard");
  if(!el)return;
- el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · "+escapeHtml(data.team):""}</span><strong>${Math.round(data.points||0)} / 100 pts</strong></div><p class="small">Meilleur score : ${Math.round(data.quizBest||0)} pts · Vus : ${(data.watched||[]).length}/8</p>`;
+ el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · Équipe : "+escapeHtml(data.team):""}</span><strong>${Math.round(data.points||0)} / 100 pts</strong></div><p class="small">Meilleur score : ${Math.round(data.quizBest||0)} pts · Vus : ${(data.watched||[]).length}/8</p>`;
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 function shareProgress(){
- let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" ("+data.team+")":""}\nPoints : ${Math.round(data.points||0)}/100\nProgression : ${(data.watched||[]).length}/8 vus\nÀ toi de jouer !`;
+ let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" (Équipe "+data.team+")":""}\nPoints : ${Math.round(data.points||0)}/100\nProgression : ${(data.watched||[]).length}/8 vus\nÀ toi de jouer !`;
  if(navigator.share)navigator.share({title:"Challenge Basket & Cinéma",text:msg}).catch(()=>{});
  else if(navigator.clipboard)navigator.clipboard.writeText(msg).then(()=>alert("Progression copiée ! Colle-la dans le groupe de l'équipe."));
  else prompt("Copie ta progression :",msg);
 }
 
 function exportProgress(){
- let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ let blob=new Blob([JSON.stringify({player: data, teams: teamsData, ready: readyPlayers},null,2)],{type:"application/json"});
  let a=document.createElement("a");
  a.href=URL.createObjectURL(blob);
- a.download="ma-progression-basket-cinema.json";
+ a.download="basket-cinema-progression.json";
  a.click();
  URL.revokeObjectURL(a.href);
 }
