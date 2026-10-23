@@ -13,7 +13,7 @@ h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.4rem 0}h2{margin:.2
 main{max-width:1100px;margin:auto;padding:0 18px 50px}.hero{background:linear-gradient(135deg,#19263b,#111a2b);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:center}
 .hero-badge{font-size:4rem;text-align:center}.tag{display:inline-block;background:#2b3a52;color:#dce7f8;padding:5px 9px;border-radius:999px;font-size:.8rem;margin:3px}
 nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;border-radius:12px;background:var(--orange);color:#1b140d;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary,.btn.secondary{background:#26364e;color:var(--text);border:1px solid #3a4b66}button:disabled{opacity:.45;cursor:not-allowed}
-.tab{background:#18253a;color:var(--muted);border:1px solid var(--line)}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
+.tab{background:#18253a;color:var(--muted);border:1px solid var(--line);padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
 .panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100% !important;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
 .team-card{background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
 .player-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:14px 0}
@@ -39,30 +39,33 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
   <p>Choisis ton profil pour accéder au challenge ou connecte-toi en tant qu'administrateur.</p>
   
   <div style="display:flex;gap:8px;margin:16px 0">
-   <button id="tabPlayerBtn" class="tab active" onclick="switchAuthTab('player')">👤 Je suis un Joueur</button>
-   <button id="tabAdminBtn" class="tab" onclick="switchAuthTab('admin')">🔑 Admin / Coach</button>
+   <button id="tabPlayerBtn" class="tab active" style="flex:1" onclick="switchAuthTab('player')">👤 Je suis un Joueur</button>
+   <button id="tabAdminBtn" class="tab" style="flex:1" onclick="switchAuthTab('admin')">🔑 Réservé au COACH VINCENT</button>
   </div>
 
   <!-- Formulaire Joueur -->
   <div id="authPlayerForm">
    <label class="field">Sélectionne ton prénom
-    <select id="modalPlayerName">
+    <select id="modalPlayerName" onchange="onModalPlayerSelect()">
      <option value="">-- Choisis ton prénom --</option>
     </select>
    </label>
-   <label class="field">Nom de ton équipe
-    <input id="modalTeamName" maxlength="30" placeholder="Ex. Team Dunk">
+   <label class="field">Ton équipe
+    <input id="modalTeamDisplay" disabled value="-- Sélectionne ton prénom --" style="background:#18253a;color:var(--orange);font-weight:700">
+   </label>
+   <label class="field">Ton Code PIN (4 chiffres)
+    <input type="password" id="modalPlayerPin" maxlength="4" placeholder="Ex: 1234">
    </label>
    <button style="width:100%;margin-top:10px" onclick="loginAsPlayer()">Entrer dans l'application →</button>
   </div>
 
   <!-- Formulaire Admin -->
   <div id="authAdminForm" class="hidden">
-   <label class="field">Code PIN Administrateur
+   <label class="field">Code PIN Coach Vincent
     <input type="password" id="adminPinInput" maxlength="6" placeholder="Entrer le code PIN">
    </label>
    <button style="width:100%;margin-top:10px" onclick="loginAsAdmin()">Se connecter en Admin →</button>
-   <p class="small" style="margin-top:10px">Code PIN par défaut : <strong style="color:var(--orange)">2026</strong></p>
+   <p class="small" style="margin-top:10px">Code PIN Coach : <strong style="color:var(--orange)">0926</strong></p>
   </div>
  </div>
 </div>
@@ -141,10 +144,9 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     <label class="field">Mon Prénom
      <input id="displayPlayerName" disabled style="background:#18253a">
     </label>
-    <label class="field">Nom de mon équipe (Personnalisable)
-     <input id="teamName" maxlength="30" placeholder="Ex. Les Panthers du Panier" required>
+    <label class="field">Mon Équipe
+     <input id="teamName" disabled style="background:#18253a;color:var(--orange);font-weight:700">
     </label>
-    <button type="submit">Mettre à jour le nom de mon équipe</button>
    </form>
    <div id="profileStatus" class="feedback hidden"></div>
    <div class="panel" style="margin-top:18px">
@@ -157,10 +159,10 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
    </div>
   </div>
 
-  <!-- PANNEAU RÉSERVÉ À L'ADMIN (CACHÉ AUX JOUEURS) -->
+  <!-- PANNEAU RÉSERVÉ À L'ADMIN -->
   <div class="panel hidden" id="adminPanelContainer">
-   <h2>🔑 Panneau Administrateur / Coach</h2>
-   <p>Réservé au coach : suivi de l'émargement des 17 joueurs et outil de tirage au sort des équipes.</p>
+   <h2>🔑 Panneau Coach Vincent</h2>
+   <p>Suivi de l'émargement des 17 joueurs et outil de tirage au sort des équipes.</p>
    <div class="row" style="margin-bottom:10px">
     <div><span class="score" id="readyCount">0 / 17</span> <span class="small">joueurs prêts</span></div>
    </div>
@@ -192,7 +194,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 <footer>Basket & Cinéma — Challenge Vacances · Créé pour jouer fair-play et découvrir la culture basket.</footer>
 
 <script>
-const CORRECT_ADMIN_PIN = "2026"; // Code PIN modifiable ici par le coach
+const CORRECT_ADMIN_PIN = "0926"; // Code PIN Admin (Coach Vincent)
 const ROSTER = [
  "Lùca", "Axel", "Hugo", "Sacha R", "Edouard", "Samuel", 
  "Raphaël", "Nolan", "Kevin", "Lucas", "Ange", "Sacha C", 
@@ -265,6 +267,7 @@ let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","t
 let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]');
 let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
 let teamAttempts = JSON.parse(localStorage.getItem("basketCinemaTeamAttempts") || '{}');
+let playerPins = JSON.parse(localStorage.getItem("basketCinemaPlayerPins") || '{}');
 
 function save(){
  localStorage.setItem("basketCinemaSession",JSON.stringify(session));
@@ -272,14 +275,16 @@ function save(){
  localStorage.setItem("basketCinemaReady",JSON.stringify(readyPlayers));
  localStorage.setItem("basketCinemaTeams",JSON.stringify(teamsData));
  localStorage.setItem("basketCinemaTeamAttempts",JSON.stringify(teamAttempts));
+ localStorage.setItem("basketCinemaPlayerPins",JSON.stringify(playerPins));
  renderAll();
 }
 
 function switchAuthTab(type){
- document.getElementById("tabPlayerBtn").classList.toggle("active", type === 'player');
- document.getElementById("tabAdminForm").classList.toggle("hidden", type === 'player');
- document.getElementById("tabAdminBtn").classList.toggle("active", type === 'admin');
- document.getElementById("authPlayerForm").classList.toggle("hidden", type === 'admin');
+ let isPlayer = type === 'player';
+ document.getElementById("tabPlayerBtn").classList.toggle("active", isPlayer);
+ document.getElementById("tabAdminBtn").classList.toggle("active", !isPlayer);
+ document.getElementById("authPlayerForm").classList.toggle("hidden", !isPlayer);
+ document.getElementById("authAdminForm").classList.toggle("hidden", isPlayer);
 }
 
 function initModalDropdown(){
@@ -289,15 +294,41 @@ function initModalDropdown(){
   ROSTER.map(p => `<option value="${p}">${p}</option>`).join("");
 }
 
+function getTeamForPlayer(playerName){
+ for(let tName in teamsData){
+  if(teamsData[tName][playerName]) return tName;
+ }
+ return "Non attribuée (En attente du tirage)";
+}
+
+function onModalPlayerSelect(){
+ let pName = document.getElementById("modalPlayerName").value;
+ let display = document.getElementById("modalTeamDisplay");
+ if(!pName){
+  display.value = "-- Sélectionne ton prénom --";
+  return;
+ }
+ display.value = getTeamForPlayer(pName);
+}
+
 function loginAsPlayer(){
  let name = document.getElementById("modalPlayerName").value;
- let team = document.getElementById("modalTeamName").value.trim();
+ let pin = document.getElementById("modalPlayerPin").value.trim();
+
  if(!name){ alert("Veuillez sélectionner votre prénom !"); return; }
- if(!team){ alert("Veuillez entrer le nom de votre équipe !"); return; }
+ if(!pin){ alert("Veuillez entrer votre code PIN !"); return; }
+
+ // Vérification ou création du PIN joueur
+ if(playerPins[name] && playerPins[name] !== pin){
+  alert("❌ Code PIN incorrect pour " + name + " !");
+  return;
+ } else if(!playerPins[name]){
+  playerPins[name] = pin; // Enregistrement du premier PIN pour ce joueur
+ }
 
  session = { role: 'player', name: name };
  data.name = name;
- data.team = team;
+ data.team = getTeamForPlayer(name);
 
  if(!readyPlayers.includes(name)) readyPlayers.push(name);
  syncPlayerToTeams();
@@ -311,13 +342,13 @@ function loginAsAdmin(){
   alert("❌ Code PIN incorrect !");
   return;
  }
- session = { role: 'admin', name: 'Administrateur' };
+ session = { role: 'admin', name: 'Coach Vincent' };
  save();
  checkSession();
 }
 
 function logout(){
- if(confirm("Voulez-vous vous déconnecter de cet appareil ?")){
+ if(confirm("Voulez-vous vous déconnecter ?")){
   session = null;
   localStorage.removeItem("basketCinemaSession");
   location.reload();
@@ -337,15 +368,16 @@ function checkSession(){
 
  modal.classList.add("hidden");
  if(session.role === 'admin'){
-  badge.textContent = "🔑 Mode Administrateur";
+  badge.textContent = "🔑 Mode Coach Vincent";
   if(adminPanel) adminPanel.classList.remove("hidden");
  } else {
-  badge.textContent = `👤 ${session.name} (${data.team || 'Sans équipe'})`;
+  data.team = getTeamForPlayer(data.name);
+  badge.textContent = `👤 ${session.name} (${data.team})`;
   if(adminPanel) adminPanel.classList.add("hidden");
   let inputName = document.getElementById("displayPlayerName");
   let inputTeam = document.getElementById("teamName");
   if(inputName) inputName.value = data.name;
-  if(inputTeam) inputTeam.value = data.team || "";
+  if(inputTeam) inputTeam.value = data.team;
  }
  renderAll();
 }
@@ -493,8 +525,11 @@ function toggleWatched(id,checked){
 }
 
 function renderProfile(){
- let teamInput = document.getElementById("teamName");
- if(teamInput && document.activeElement !== teamInput) teamInput.value = data.team || "";
+ let inputName = document.getElementById("displayPlayerName");
+ let inputTeam = document.getElementById("teamName");
+ if(inputName) inputName.value = data.name || "";
+ if(inputTeam) inputTeam.value = data.team || "Non attribuée";
+
  let pts = document.getElementById("profilePoints");
  if(pts) pts.textContent = Math.round(data.points||0);
  let watched = document.getElementById("profileWatched");
@@ -506,22 +541,8 @@ function renderProfile(){
  }
 }
 
-document.getElementById("profileForm").addEventListener("submit",e=>{
- e.preventDefault();
- let oldTeam = data.team;
- data.team = document.getElementById("teamName").value.trim().slice(0,30);
- 
- if(oldTeam && oldTeam !== data.team && teamsData[oldTeam] && teamsData[oldTeam][data.name]){
-  delete teamsData[oldTeam][data.name];
- }
-
- syncPlayerToTeams();
- save();
- alert("Nom d'équipe mis à jour avec succès !");
-});
-
 function syncPlayerToTeams(){
- if(!data.team || !data.name) return;
+ if(!data.team || !data.name || data.team.includes("Non attribuée")) return;
  if(!teamsData[data.team]) teamsData[data.team] = {};
  teamsData[data.team][data.name] = { points: data.points || 0, watchedList: [...data.watched] };
 }
@@ -560,10 +581,14 @@ function runDraft(force){
   </div>
  `).join("");
 
+ teamsData = {}; // Réinitialiser les équipes
  Object.keys(generatedTeams).forEach(tName => {
-  if(!teamsData[tName]) teamsData[tName] = {};
+  teamsData[tName] = {};
   generatedTeams[tName].forEach(p => {
-   if(!teamsData[tName][p]) teamsData[tName][p] = { points: 0, watchedList: [] };
+   teamsData[tName][p] = { points: 0, watchedList: [] };
+   if(p === data.name){
+    data.team = tName;
+   }
   });
  });
  save();
@@ -611,8 +636,8 @@ let current=0,sessionScore=0,answered=false;
 
 function startQuiz(){
  let area=document.getElementById("quizArea");
- if(!data.name || !data.team){
-  area.innerHTML=`<div class="notice">⚠️ Profil requis.</div>`;
+ if(!data.name || !data.team || data.team.includes("Non attribuée")){
+  area.innerHTML=`<div class="notice">⚠️ Profil ou équipe non attribuée. Attendez le tirage du Coach !</div>`;
   return;
  }
 
@@ -733,9 +758,8 @@ function exportProgress(){
  a.click();
 }
 
-// Lancement au démarrage
 window.onload = function(){
- session = null; // Réinitialise la session à chaque ouverture de page
+ session = null; // Reamener systématiquement sur la modale d'identification
  checkSession();
 }
 </script>
