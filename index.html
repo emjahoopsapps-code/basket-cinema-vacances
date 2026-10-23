@@ -98,22 +98,6 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
  <!-- TABLEAU DE BORD DE LA 1ÈRE PAGE -->
  <div class="panel" style="margin-top:20px">
-  <div class="row">
-   <div>
-    <h3>👥 Progression des profils créés</h3>
-    <p class="small">Nombre de joueurs inscrits :</p>
-    <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:4px">
-     <span>Inscriptions</span>
-     <span id="heroReadyCount">0 / 17 Joueurs</span>
-    </div>
-    <div class="progress-bar-container">
-     <div id="heroReadyBar" class="progress-bar-fill" style="width:0%"></div>
-    </div>
-   </div>
-  </div>
-
-  <hr style="border-color:var(--line);margin:20px 0">
-
   <h3>📊 Graphique de progression par équipe</h3>
   <p class="small">Classement en direct des points cumulés par équipe :</p>
   <div id="homeTeamChart">
@@ -199,6 +183,17 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     <div class="kpi-card">
      <div class="small">Équipe Leader</div>
      <div class="kpi-value" id="adminKpiTopTeam" style="font-size:1.2rem">-</div>
+    </div>
+   </div>
+
+   <!-- BARRE DE PROGRESSION GLOBALE DES INSCRIPTIONS RECULÉE CÔTÉ ADMIN -->
+   <div style="background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin:20px 0">
+    <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:6px">
+     <span>👥 Profils Créés / Inscriptions</span>
+     <span id="heroReadyCount" style="color:var(--orange)">0 / 17 Joueurs (0%)</span>
+    </div>
+    <div class="progress-bar-container">
+     <div id="heroReadyBar" class="progress-bar-fill" style="width:0%"></div>
     </div>
    </div>
 
@@ -748,7 +743,6 @@ function renderProfile(){
  if(inputName) inputName.value = data.name || "";
  if(inputTeam) inputTeam.value = data.team || "Non attribuée";
 
- // Affichage de la liste des coéquipiers
  let teammatesContainer = document.getElementById("playerTeamTeammatesList");
  if(teammatesContainer){
   if(data.team && teamsData[data.team]){
@@ -940,9 +934,7 @@ function answer(i){
  let q=activeQuestions[current];
  document.querySelectorAll(".quiz-option").forEach((b,j)=>{
   b.disabled=true;
-  // Ne mettre en vert QUE si la réponse choisie est la bonne
   if(j===i && i===q.a) b.classList.add("correct");
-  // Mettre en rouge si la réponse choisie est fausse
   if(j===i && i!==q.a) b.classList.add("wrong");
  });
  if(i===q.a) sessionScore+=q.pts;
