@@ -22,29 +22,29 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 <header>
  <div class="eyebrow">🏀 Le défi des vacances</div>
  <h1>Basket <span style="color:var(--orange)">&</span> Cinéma</h1>
- <p>Découvre les films qui ont marqué la culture basket. Regarde, joue, marque des points et défie tes coéquipiers.</p>
+ <p>Découvre les films et documentaires qui ont marqué la culture basket. Regarde, joue, marque des points et défie tes coéquipiers.</p>
  <span class="tag">14–18 ans</span><span class="tag">Solo ou en équipe</span><span class="tag">100 % depuis ton téléphone</span>
 </header>
 <main>
  <section class="hero">
-  <div><h2>Prêt à devenir le MVP du cinéma basket ?</h2><p>Choisis ton profil, découvre les films, puis lance le quiz. Tes résultats sont enregistrés sur cet appareil.</p><button onclick="showTab('profil')">Créer mon profil →</button></div>
+  <div><h2>Prêt à devenir le MVP du cinéma basket ?</h2><p>Choisis ton profil, découvre la sélection, puis lance le quiz. Tes résultats sont enregistrés sur cet appareil.</p><button onclick="showTab('profil')">Créer mon profil →</button></div>
   <div class="hero-badge" aria-hidden="true">🎬🏀</div>
  </section>
  <nav aria-label="Navigation">
-  <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films</button>
+  <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films & Docus</button>
   <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
   <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Mon profil</button>
   <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores</button>
  </nav>
  <section id="films" class="view">
-  <h2>À découvrir</h2><p>Lis le pitch, trouve le film sur une plateforme légale, regarde-le, puis coche « Vu » pour débloquer les questions correspondantes du quiz.</p>
+  <h2>À découvrir (8 titres)</h2><p>Lis le pitch, regarde l'œuvre sur une plateforme, puis coche « Vu » pour débloquer ses 5 questions de quiz.</p>
   <div id="movieGrid" class="grid"></div>
   <div class="notice" style="margin-top:16px">Les disponibilités changent selon le pays et la date. Les liens de recherche servent à trouver une offre légale ; cette application ne diffuse aucun film.</div>
  </section>
  <section id="quiz" class="view hidden">
   <div class="panel">
    <div class="row"><div><div class="eyebrow">Challenge individuel</div><h2 id="quizTitle">Quiz basket & cinéma</h2></div><div style="text-align:right"><div class="score" id="liveScore">0</div><div class="small">points gagnés ici</div></div></div>
-   <p id="quizIntro">Les questions se débloquent en fonction des films que tu as marqués comme « Vus » dans l'onglet Films !</p>
+   <p id="quizIntro">Les questions se débloquent au fur et à mesure des films marqués comme « Vus » dans l'onglet Films !</p>
    <div id="quizArea"><button onclick="startQuiz()">Lancer le quiz</button></div>
   </div>
  </section>
@@ -56,7 +56,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     <button type="submit">Enregistrer mon profil</button>
    </form>
    <div id="profileStatus" class="feedback hidden"></div>
-   <div class="panel" style="margin-top:18px"><h3>Ma progression</h3><div class="row"><div><div class="score" id="profilePoints">0</div><div class="small">points cumulés sur cet appareil (max 100)</div></div><div><div class="score" id="profileWatched">0/7</div><div class="small">films marqués comme vus</div></div></div><p id="profileBadge" class="pill">🏀 Rookie Cinéphile</p></div>
+   <div class="panel" style="margin-top:18px"><h3>Ma progression</h3><div class="row"><div><div class="score" id="profilePoints">0</div><div class="small">points cumulés sur cet appareil (max 100)</div></div><div><div class="score" id="profileWatched">0/8</div><div class="small">titres marqués comme vus</div></div></div><p id="profileBadge" class="pill">🏀 Rookie Cinéphile</p></div>
   </div>
  </section>
  <section id="classement" class="view hidden">
@@ -72,94 +72,67 @@ const movies = [
  {id:"space",title:"Space Jam",original:"Space Jam",year:1996,emoji:"👽",level:"NBA & pop culture",pitch:"Michael Jordan fait équipe avec les Looney Tunes dans un match complètement fou contre les Monstars.",learn:"Une icône NBA, l'imaginaire des années 1990 et la culture populaire.",search:"Space Jam 1996 film streaming légal France"},
  {id:"air",title:"Air",original:"Air",year:2023,emoji:"👟",level:"Histoire & business",pitch:"Le film raconte les négociations qui ont conduit à un partenariat historique entre Nike et le jeune Michael Jordan.",learn:"Marketing sportif, négociation et naissance d'une ligne de chaussures iconique.",search:"Air 2023 film streaming légal France"},
  {id:"bluechips",title:"Blue Chips",original:"Blue Chips",year:1994,emoji:"🍔",level:"Université & éthique",pitch:"Un entraîneur universitaire intègre mais poussé à bout accepte des compromis illégaux pour recruter les meilleurs lycéens du pays.",learn:"Éthique sportive, pression des résultats et système universitaire américain.",search:"Blue Chips 1994 film streaming légal France"},
- {id:"glory",title:"Les Chemins du triomphe",original:"Glory Road",year:2006,emoji:"🏆",level:"Histoire & collectif",pitch:"Inspiré de l'équipe universitaire Texas Western de 1966, le film aborde le racisme et un moment marquant de l'histoire du basket universitaire.",learn:"Histoire du basket, courage, inclusion et force du collectif.",search:"Glory Road 2006 film streaming légal France"}
+ {id:"glory",title:"Les Chemins du triomphe",original:"Glory Road",year:2006,emoji:"🏆",level:"Histoire & collectif",pitch:"Inspiré de l'équipe universitaire Texas Western de 1966, le film aborde le racisme et un moment marquant de l'histoire du basket universitaire.",learn:"Histoire du basket, courage, inclusion et force du collectif.",search:"Glory Road 2006 film streaming légal France"},
+ {id:"shaqstyle",title:"Shaquille O'Neal impose son style",original:"Power Moves with Shaquille O'Neal",year:2025,emoji:"👔",level:"Business & Légende",pitch:"Docu-série captivant suivant Shaquille O'Neal et Allen Iverson dans leur mission d'entrepreneurs pour relancer la marque Reebok Basketball.",learn:"Leadership d'entreprise, sneakers culture, marketing et reconversion des légendes.",search:"Shaquille O'Neal impose son style Netflix streaming légal France"}
 ];
 
-// 70 questions au total (10 par film), variant de 1 à 2 points pour atteindre exactement 100 points max.
+// 40 questions (5 par film/docu). Valeur constante de 2.5 pts par question (Total pile = 100 pts)
 const questions = [
- // --- HUSTLE (Total: 15 pts) ---
- {movieId:"hustle", q:"Dans quelle île espagnole Stanley Sugarman découvre-t-il Bo Cruz en train de jouer sur un playground ?", opts:["Majorque","Ibiza","Ténérife","Minorque"], a:0, points:1, why:"Stanley repère Bo sur un terrain extérieur à Majorque."},
- {movieId:"hustle", q:"Quel est le métier qu'exerce Bo Cruz au début du film pour subvenir aux besoins de sa famille ?", opts:["Maçon / ouvrier du bâtiment","Serveur dans un bar","Vendeur de chaussures","Chauffeur de taxi"], a:0, points:1, why:"Bo travaille sur des chantiers et pose du parquet."},
- {movieId:"hustle", q:"Quel joueur NBA incarne le grand rival provocateur de Bo Cruz, Vince Merrick ?", opts:["LeBron James","Anthony Edwards","Trae Young","Devin Booker"], a:1, points:1, why:"Anthony Edwards joue le rôle de l'arrogant Vince Merrick."},
- {movieId:"hustle", q:"Dans quelle franchise NBA Stanley Sugarman travaille-t-il comme recruteur de terrain ?", opts:["Boston Celtics","New York Knicks","Philadelphia 76ers","Chicago Bulls"], a:2, points:1, why:"Il travaille pour les 76ers de Philadelphie."},
- {movieId:"hustle", q:"Quel membre de la direction des 76ers, fils du propriétaire, déteste Stanley et cherche à saboter sa carrière ?", opts:["Rex Merrick","Adam Silver","Morey Vance","Jerry Colangelo"], a:0, points:1, why:"Rex Merrick, hautain et incompétent, s'oppose constamment à Stanley."},
- {movieId:"hustle", q:"Quel exercice exténuant Stanley fait-il répéter à Bo sur une pente raide en Pennsylvanie pour tester son cardio ?", opts:["Courir en portant un pneu lesté relié à un harnais","Faire des pompes dans la boue","Porter des haltères en montant des marches","Courir avec un gilet de 20 kg"], a:0, points:2, why:"L'exercice du pneu avec résistance est central dans leur préparation physique."},
- {movieId:"hustle", q:"Lors du premier match de showcase à Las Vegas, pourquoi Bo perd-il ses moyens au début ?", opts:["Il se blesse gravement au genou","Il s'emporte à cause du trash-talk de son adversaire","Il refuse d'entrer sur le terrain","Il rate tous ses tirs de loin"], a:1, points:2, why:"Il craque psychologiquement face aux provocations verbales sur le terrain."},
- {movieId:"hustle", q:"Quel joueur superstar de la NBA est le producteur principal du film à travers sa société SpringHill Company ?", opts:["Stephen Curry","Kevin Durant","LeBron James","Giannis Antetokounmpo"], a:2, points:2, why:"LeBron James est l'un des principaux producteurs du film."},
- {movieId:"hustle", q:"Avec quels membres de sa famille Bo vit-il au quotidien au début du film ?", opts:["Sa mère et sa fille Alex","Son frère et son père","Sa femme uniquement","Il vit seul"], a:0, points:2, why:"Il vit avec sa mère protectrice et sa fille adorée Alex."},
- {movieId:"hustle", q:"À la fin du film, après tous ses efforts, dans quelle équipe Bo obtient-il enfin son contrat NBA ?", opts:["Los Angeles Lakers","Philadelphia 76ers","Miami Heat","Golden State Warriors"], a:1, points:2, why:"Il intègre finalement les 76ers de Philadelphie."},
+ // --- HUSTLE ---
+ {movieId:"hustle", q:"Dans quelle ville espagnole le recruteur Stanley repère-t-il Bo Cruz sur un terrain de streetball ?", opts:["Barcelone","Madrid","Majorque","Valence"], a:2, pts:2.5, why:"Il le découvre lors d'un détour à Majorque."},
+ {movieId:"hustle", q:"Quel vrai joueur professionnel de la NBA incarne le talentueux Bo Cruz ?", opts:["Juancho Hernangómez","Ricky Rubio","Pau Gasol","Luka Dončić"], a:0, pts:2.5, why:"C'est le joueur espagnol Juancho Hernangómez."},
+ {movieId:"hustle", q:"Quel est le grand rival provocateur de Bo, incarné par Anthony Edwards ?", opts:["Vince Merrick","Kermit Wilts","Boogeyman","Tyler Smith"], a:1, pts:2.5, why:"Kermit Wilts utilise le trash-talk pour déstabiliser Bo."},
+ {movieId:"hustle", q:"Quelle superstar NBA a coproduit le film avec Adam Sandler ?", opts:["LeBron James","Stephen Curry","Kevin Durant","Shaquille O'Neal"], a:0, pts:2.5, why:"LeBron James est producteur via SpringHill Company."},
+ {movieId:"hustle", q:"[Précis] Quel exercice physique précis et éprouvant Stanley impose-t-il à Bo sur une côte en Pennsylvanie ?", opts:["Tirer un pneu d'automobile lesté avec un harnais","Monter des marches avec un sac de sable","Courir 10 km sous la pluie","Faire 100 dunks d'affilée"], a:0, pts:2.5, why:"L'exercice du pneu sur la côte est devenu la scène d'entraînement mythique du film."},
 
- // --- COACH CARTER (Total: 15 pts) ---
- {movieId:"coach", q:"Combien de pompes et de suicides (allers-retours) le joueur Timo Cruz doit-il effectuer pour espérer réintégrer l'équipe après son exclusion ?", opts:["1000 pompes et 500 suicides","2500 pompes et 1000 suicides","5000 pompes et 2000 suicides","500 pompes et 200 suicides"], a:1, points:2, why:"C'est la condition draconienne exigée par le coach Carter (2500 pompes et 1000 suicides)."},
- {movieId:"coach", q:"Quel est le nom du lycée public de Richmond où se déroule l'histoire ?", opts:["Richmond High School","Oak Hill Academy","St. Francis High","Lamar High"], a:0, points:1, why:"Le film se déroule au Richmond High School."},
- {movieId:"coach", q:"Pourquoi le coach Ken Carter ferme-t-il l'accès au gymnase de son équipe pourtant invaincue ?", opts:["Parce qu'ils ont de mauvaises notes scolaires","Parce qu'ils se sont battus dans les couloirs","Parce qu'ils ont séché l'entraînement","Parce que la salle est en travaux"], a:0, points:1, why:"Il sanctionne les résultats scolaires insuffisants (en dessous de 2.3 de moyenne)."},
- {movieId:"coach", q:"Quel jeune joueur de l'équipe, qui se trouve être le propre fils du coach, quitte l'école privée de St. Francis pour le rejoindre ?", opts:["Damian Carter","Worm","Kenyon Stone","Junior Battle"], a:0, points:1, why:"Damian Carter rejoint l'équipe de son père en début de film."},
- {movieId:"coach", q:"Quel est le prénom de la petite amie de Kenyon Stone qui lui annonce qu'elle est enceinte ?", opts:["Kyra","Tanya","Nicole","Jasmine"], a:0, points:1, why:"Kyra annonce sa grossesse à Kenyon, ce qui soulève la question de son avenir."},
- {movieId:"coach", q:"Quelle décision prend finalement le conseil d'établissement (school board) face à la gronde des parents ?", opts:["Ils soutiennent le coach à l'unanimité","Ils votent pour rouvrir le gymnase malgré le refus du coach","Ils annulent complètement la saison","Ils renvoient le proviseur"], a:1, points:2, why:"Le conseil vote la réouverture du gymnase, poussant Carter à démissionner."},
- {movieId:"coach", q:"Quel commerce gère Ken Carter dans la vie civile en parallèle de son rôle d'entraîneur ?", opts:["Une station-service","Un magasin d'articles de sport / chaussures","Une salle de musculation indépendante","Un restaurant rapide"], a:1, points:2, why:"Il tient un magasin de sport et de chaussures à Richmond."},
- {movieId:"coach", q:"Quel tournoi d'État les joueurs disputent-ils à la fin, s'inclinant de justesse en quart de finale ?", opts:["Le tournoi d'État (State Championship)","Le championnat national NCAA","Le tournoi regional de streetball","La coupe de Californie junior"], a:0, points:2, why:"Ils participent au tournoi d'État et perdent de peu contre St. Francis."},
- {movieId:"coach", q:"Quelle célèbre poétesse/autrice est citée à la fin par Timo Cruz dans son discours (« Notre peur la plus profonde... ») ?", opts:["Maya Angelou","Marianne Williamson","Toni Morrison","Alice Walker"], a:1, points:2, why:"C'est un texte célèbre de Marianne Williamson."},
- {movieId:"coach", q:"Quel record personnel Ken Carter détenait-il lui-même lorsqu'il jouait au lycée de Richmond ?", opts:["Le record de points marqués en carrière","Le record de passes décisives","Le record de rebonds en un match","Le record de lancers francs réussis d'affilée"], a:0, points:1, why:"Il détenait les records de scoring du lycée avant d'être battu par ses propres élèves."},
+ // --- COACH CARTER ---
+ {movieId:"coach", q:"Pour quelle raison principale le coach Ken Carter ferme-t-il les portes du gymnase ?", opts:["Pour des résultats scolaires insuffisants","À cause de bagarres répétées","Pour retard à l'entraînement","Par manque de budget"], a:0, pts:2.5, why:"Il exige le respect du contrat académique passé avec ses joueurs."},
+ {movieId:"coach", q:"Quel acteur légendaire incarne le charismatique entraîneur Ken Carter ?", opts:["Denzel Washington","Samuel L. Jackson","Morgan Freeman","Will Smith"], a:1, pts:2.5, why:"Samuel L. Jackson livre une prestation mémorable dans ce rôle."},
+ {movieId:"coach", q:"Quel est le nom du lycée californien dans lequel se déroule l'histoire ?", opts:["Richmond High School","Lincoln High","Oakland Prep","St. Francis"], a:0, pts:2.5, why:"L'histoire se déroule au lycée public de Richmond."},
+ {movieId:"coach", q:"Quelle est la devise / condition essentielle que fait signer le coach dans ses contrats ?", opts:["Avoir au moins 2.3 de moyenne et s'asseoir au premier rang","Gagner tous les matchs","Ne jamais parler aux arbitres","Porter un costume le week-end"], a:0, pts:2.5, why:"Le contrat impose l'excellence académique et la tenue adéquate."},
+ {movieId:"coach", q:"[Précis] Combien de pompes Timo Cruz doit-il faire pour être réintégré dans l'équipe ?", opts:["500 pompes","1000 pompes","2500 pompes","5000 pompes"], a:2, pts:2.5, why:"Il doit accomplir le chiffre titanesque de 2500 pompes (et 1000 suicides), aidé par ses coéquipiers."},
 
- // --- WHITE MEN CAN'T JUMP (Total: 15 pts) ---
- {movieId:"white", q:"Quel est le nom du personnage principal blanc, ancien joueur universitaire au style trompeur, incarné par Woody Harrelson ?", opts:["Billy Hoyle","Jack Ryan","Pete Bell","Danny Doyle"], a:0, points:1, why:"Billy Hoyle écume les playgrounds de Los Angeles."},
- {movieId:"white", q:"Quel est le nom du joueur afro-américain charismatique qui devient son partenaire et rival, joué par Wesley Snipes ?", opts:["Sidney Deane","Neon Boudeaux","Butch McRae","Jesus Shuttlesworth"], a:0, points:1, why:"Sidney Deane fait équipe avec Billy pour arnaquer les joueurs locaux."},
- {movieId:"white", q:"Quel jeu télévisé de culture générale Gloria, la compagne de Billy, rêve-t-elle désespérément de gagner ?", opts:["Jeopardy!","Wheel of Fortune","Qui veut gagner des millions ?","Le Juste Prix"], a:0, points:1, why:"Gloria potasse sans cesse Jeopardy! pour changer de vie."},
- {movieId:"white", q:"Combien d'argent Sidney escroque-t-il initialement à Billy lors de leur première confrontation sur un terrain de Venice Beach ?", opts:["500 dollars","1000 dollars","1700 dollars","2500 dollars"], a:2, points:2, why:"Billy perd 1 700 dollars en se faisant avoir sur ses capacités au dunk."},
- {movieId:"white", q:"Dans quelle grande métropole américaine se déroule entièrement l'intrigue du film ?", opts:["New York","Chicago","Los Angeles","Miami"], a:2, points:1, why:"Le film se déroule sous le soleil de Los Angeles et ses playgrounds iconiques."},
- {movieId:"white", q:"Quel tournoi de streetball à gros enjeu financier Billy et Sidney décident-ils de disputer ensemble à la fin ?", opts:["Le grand tournoi de Venice Beach avec cash prize","Le tournoi universitaire NCAA","Le championnat pro-am d'été","Le tournoi de streetball de Harlem"], a:0, points:2, why:"Ils s'inscrivent au tournoi local majeur doté d'une grosse somme d'argent."},
- {movieId:"white", q:"Que fait Gloria avec l'argent qu'elle remporte finalement au jeu télévisé Jeopardy! ?", opts:["Elle le flambe au casino","Elle l'utilise pour offrir à Billy un vrai essai (tryout) professionnel","Elle achète une grande maison à Beverly Hills","Elle le donne entièrement à Sidney"], a:1, points:2, why:"Elle gagne 14 100 $ et pose un ultimatum pour offrir à Billy sa chance."},
- {movieId:"white", q:"Quelle marque de chaussures voyantes Billy porte-t-il au début, devenant la risée de Sidney ?", opts:["Nike Air Command Force","Adidas Superstar","Converse Weapon","Puma Suede"], a:0, points:2, why:"Ses fameuses Nike montantes voyantes attireront les moqueries de Sidney."},
- {movieId:"white", q:"Pourquoi Sidney avait-il absolument besoin d'argent au début, le poussant à s'associer avec Billy ?", opts:["Pour acheter un duplex à Crenshaw et loger sa famille","Pour rembourser des dettes de jeux d'argent","Pour acheter une nouvelle voiture de sport","Pour payer ses études de droit"], a:0, points:2, why:"Il venait d'acheter un logement à Crenshaw nécessitant des rénovations urgentes."},
- {movieId:"white", q:"Quelle est la phrase provocante répétée sans cesse par le titre du film à propos des joueurs blancs ?", opts:["Les blancs ne savent pas sauter","Les blancs ne savent pas dribbler","Les blancs ne savent pas défendre","Les blancs ne savent pas shooter à 3 points"], a:0, points:1, why:"« White Men Can't Jump » est le postulat central des paris de rue."},
+ // --- WHITE MEN CAN'T JUMP ---
+ {movieId:"white", q:"Où se déroule la majorité des matchs de streetball du film ?", opts:["Venice Beach à Los Angeles","Rucker Park à New York","Chicago Loop","South Beach à Miami"], a:0, pts:2.5, why:"Les terrains mythiques de Venice Beach servent de décor principal."},
+ {movieId:"white", q:"Quel tandem d'acteurs forme le duo iconique Billy Hoyle et Sidney Deane ?", opts:["Woody Harrelson et Wesley Snipes","Matt Damon et Will Smith","Keanu Reeves et Eddie Murphy","Brad Pitt et Martin Lawrence"], a:0, pts:2.5, why:"Woody Harrelson et Wesley Snipes crèvent l'écran par leur complicité."},
+ {movieId:"white", q:"Quel célèbre jeu télévisé de culture générale Gloria (la compagne de Billy) rêve-t-elle de remporter ?", opts:["Jeopardy!","Le Juste Prix","Wheel of Fortune","Qui veut gagner des millions ?"], a:0, pts:2.5, why:"Elle étudie sans relâche pour participer à Jeopardy!."},
+ {movieId:"white", q:"Sur quel aspect du jeu Billy parie-t-il souvent pour piéger ses adversaires sous-estimant son niveau ?", opts:["Sa capacité à shooter de très loin malgré son look d'amateur","Sa détente verticale exceptionnelle","Sa défense brutale","Ses passes aveugles"], a:0, pts:2.5, why:"Son look décontracté pousse les joueurs à le sous-estimer au tir."},
+ {movieId:"white", q:"[Précis] Quel défi physique Billy réussit-il à la toute fin du film pour prouver à Sidney qu'il en est capable ?", opts:["Il réussit un dunk fracassant en match","Il marque du milieu du terrain les yeux fermés","Il réussit 20 lancers francs d'affilée","Il contres le meilleur joueur de la ville"], a:0, pts:2.5, why:"Billy claque enfin un dunk symbolique à la fin du match décisif."},
 
- // --- SPACE JAM (Total: 15 pts) ---
- {movieId:"space", q:"Quel est le nom du parc d'attractions spatial extraterrestre dirigé par le redoutable Swackhammer ?", opts:["Moron Mountain","Galaxy Land","Space World","Alien Park"], a:0, points:1, why:"Swackhammer veut sauver son parc en faillite grâce aux Looney Tunes."},
- {movieId:"space", q:"Quel est le nom exact de l'équipe extraterrestre qui vole les talents des stars NBA ?", opts:["Les Monstars","The Aliens","Tune Destroyers","Galaxy Squad"], a:0, points:1, why:"Les Monstars absorbent le talent de Charles Barkley, Patrick Ewing, etc."},
- {movieId:"space", q:"Quel joueur NBA se fait aspirer son talent en plein entraînement sur un playground extérieur avec des enfants ?", opts:["Muggsy Bogues","Shaquille O'Neal","Kobe Bryant","Allen Iverson"], a:0, points:2, why:"Muggsy Bogues est l'un des joueurs piégés par le ballon mystérieux."},
- {movieId:"space", q:"Quel acteur célèbre débarque par surprise dans le film pour aider l'équipe lors du match final ?", opts:["Bill Murray","Chevy Chase","Dan Aykroyd","Eddie Murphy"], a:0, points:1, why:"Bill Murray s'invite sur le parquet en affirmant être un ami du réalisateur."},
- {movieId:"space", q:"De quoi est réellement composée la fameuse « Potion magique de Michael » (Secret Stuff) distribuée aux Looney Tunes ?", opts:["D'eau de source ordinaire dans une gourde","De jus de carotte énergisant","De vitamines intergalactiques","De soda sucré"], a:0, points:2, why:"C'est de la simple eau, mais l'effet placebo libère leur confiance en eux."},
- {movieId:"space", q:"Quel personnage féminin des Looney Tunes fait ses débuts remarqués dans ce film ?", opts:["Lola Bunny","Babs Bunny","Tazette","Pénélope Pussycat"], a:0, points:1, why:"Lola Bunny rejoint l'équipe et impressionne Bugs Bunny."},
- {movieId:"space", q:"Quel sport Michael Jordan essaie-t-il d'abord d'exercer au cinéma avant d'être emporté par les Looney Tunes ?", opts:["Le baseball","Le golf","Le football américain","Le tennis"], a:0, points:2, why:"Le film fait référence à sa parenthèse professionnelle dans le baseball (MLB)."},
- {movieId:"space", q:"Quel est le score écrasant à la mi-temps en faveur des Monstars avant le sursaut des Tunes ?", opts:["66 à 18 pour les Monstars","50 à 10 pour les Monstars","40 à 30 pour les Monstars","80 à 20 pour les Monstars"], a:0, points:2, why:"Les Tunes sont complètement écrasés en première mi-temps."},
- {movieId:"space", q:"Comment se termine l'action dramatique de la dernière seconde du match par Michael Jordan ?", opts:"Il s'allonge et s'étire le bras de dix mètres pour marquer au buzzer", opts2:[], opts:["Il réussit un dunk de l'autre bout du terrain","Il tire de derrière les panneaux","Il passe la balle à Bugs Bunny"], a:0, points:2, why:"Il étire son bras de cartoon pour aplatir le ballon dans le cercle à la sirène."},
- {movieId:"space", q:"Quel est le nom de l'équipe entraînée par Michael Jordan pour affronter les monstres ?", opts:["Tune Squad","Dream Team","Looney 5","Bulls Tunes"], a:0, points:1, why:"La Tune Squad affronte les Monstars."},
+ // --- SPACE JAM ---
+ {movieId:"space", q:"Quelle icône mondiale du basket fait équipe avec les Looney Tunes dans ce film de 1996 ?", opts:["Michael Jordan","Magic Johnson","Kobe Bryant","Shaquille O'Neal"], a:0, pts:2.5, why:"Michael Jordan est la star incontournable du film."},
+ {movieId:"space", q:"Comment s'appelle l'équipe formée par Bugs Bunny, Lola Bunny et Michael Jordan ?", opts:["Tune Squad","Monstars","Looney 5","Bulls Squad"], a:0, pts:2.5, why:"La Tune Squad affronte les vilains Monstars."},
+ {movieId:"space", q:"Quel est le pouvoir des extraterrestres Monstars ?", opts:["Ils ont volé le talent de superstars de la NBA","Ils sont invincibles par magie","Ils trhent avec la gravité","Ils lisent dans les pensées"], a:0, pts:2.5, why:"Ils ont absorbé les capacités de Barkley, Ewing, Bogues, Johnson et Bradley."},
+ {movieId:"space", q:"Quel acteur comique célèbre vient aider la Tune Squad sur le terrain à la fin du match ?", opts:["Bill Murray","Jim Carrey","Adam Sandler","Robin Williams"], a:0, pts:2.5, why:"Bill Murray fait une apparition mémorable lors du match final."},
+ {movieId:"space", q:"[Précis] Quelle est la véritable nature de la « Potion Magique » (Secret Stuff) donnée aux Looney Tunes à la mi-temps ?", opts:["De la simple eau du robinet","Un jus de carotte concentré","Une boisson énergisante rose","Un sérum d'espace"], a:0, pts:2.5, why:"C'est de l'eau ordinaire utilisée comme effet placebo pour leur redonner confiance."},
 
- // --- AIR (Total: 15 pts) ---
- {movieId:"air", q:"Quel est le nom du PDG et fondateur de Nike qui hésite au départ à miser tout le budget basket sur un seul rookie ?", opts:["Phil Knight","Bill Bowerman","Rob Strasser","Sonny Vaccaro"], a:0, points:1, why:"Phil Knight dirige l'entreprise avec une philosophie excentrique."},
- {movieId:"air", q:"Quel était le montant initial de l'enveloppe budgétaire annuelle que Nike prévoyait de répartir entre *tous* ses rookies ?", opts:["250 000 dollars","1 million de dollars","500 000 dollars","2 millions de dollars"], a:0, points:2, why:"Le budget global était de seulement 250 000 $ pour plusieurs joueurs."},
- {movieId:"air", q:"Quel est le nom de la mère de Michael Jordan qui pose des conditions révolutionnaires et historiques à Nike ?", opts:["Deloris Jordan","Doris Jordan","Sandra Jordan","Michelle Jordan"], a:0, points:1, why:"Deloris Jordan négocie avec brio une part sur chaque chaussure vendue."},
- {movieId:"air", q:"Quel agent sportif puissant et redouté, représentant de Michael Jordan, s'oppose aux méthodes de Sonny Vaccaro ?", opts:["David Falk","Rich Paul","Arn Tellem","Happy Walters"], a:0, points:2, why:"David Falk protège farouchement les intérêts de son jeune client."},
- {movieId:"air", q:"Quel modèle de chaussures mythique est né de ce partenariat historique révolutionnaire ?", opts:["Air Jordan 1","Air Force 1","Nike Blazer","Air Max 90"], a:0, points:1, why:"La création de la ligne Air Jordan va transformer l'histoire du marketing."},
- {movieId:"air", q:"Pourquoi la première version de la chaussure a-t-elle failli valoir de lourdes amendes à Michael Jordan en NBA ?", opts:["Ses couleurs rouge et noire ne respectaient pas le règlement vestimentaire de la ligue","Elle comportait un logo non homologué","Elle était jugée trop lourde pour le parquet","Elle contenait des ressorts interdits"], a:0, points:2, why:"La NBA interdisait les chaussures majoritairement noires et rouges à l'époque."},
- {movieId:"air", q:"Quel collègue marketeur de Sonny Vaccaro l'aide à concevoir secrètement le prototype et le pitch audacieux ?", opts:["Rob Strasser","Howard White","Peter Moore","Sandy Bodecker"], a:0, points:2, why:"Rob Strasser participe activement à la conception du projet fou."},
- {movieId:"air", q:"En quelle année exacte se déroulent les tractations et les événements décrits dans le film ?", opts:["1984","1988","1991","1979"], a:0, points:2, why:"L'année 1984 marque l'arrivée de Jordan en NBA et la signature avec Nike."},
- {movieId:"air", q:"Quelle habitude vestimentaire et comportementale caractérise le patron Phil Knight dans le film ?", opts:["Il court régulièrement pieds nus et médite au bureau","Il porte toujours un costume trois pièces blanc","Il refuse de parler au téléphone","Il arrive systématiquement en retard"], a:0, points:1, why:"Phil Knight est adepte de la course à pied et de la philosophie bouddhiste."},
- {movieId:"air", q:"Quel département de Nike Sonny Vaccaro dirige-t-il au début du film ?", opts:["La cellule de repérage et de marketing du basketball","Le service international de course à pied","La division des vêtements de sport","Le design des semelles de chaussures"], a:0, points:1, why:"Il est spécialiste du scouting et du recrutement des talents pour le basket."},
+ // --- AIR ---
+ {movieId:"air", q:"Quelle grande marque d'équipements sportifs tente de signer le jeune Michael Jordan en 1984 ?", opts:["Nike","Adidas","Puma","Converse"], a:0, pts:2.5, why:"Le film retrace la création de la division basket de Nike autour de Jordan."},
+ {movieId:"air", q:"Quel acteur joue le rôle de Sonny Vaccaro, le recruteur perspicace de chez Nike ?", opts:["Matt Damon","Ben Affleck","Jason Bateman","Chris Tucker"], a:0, pts:2.5, why:"Matt Damon incarne le visionnaire Sonny Vaccaro."},
+ {movieId:"air", q:"Quelle personne clé dans l'entourage de Michael Jordan négocie d'une main de maître son contrat ?", opts:["Sa mère, Deloris Jordan","Son agent David Falk uniquement","Son père James Jordan","Son entraîneur universitaire"], a:0, pts:2.5, why:"Deloris Jordan impose des conditions financières inédites et révolutionnaires."},
+ {movieId:"air", q:"Quel modèle de sneakers mythique est créé au cours de ces négociations ?", opts:["Air Jordan 1","Air Force 1","Superstar","Suede Classic"], a:0, pts:2.5, why:"La création de la Air Jordan 1 va bouleverser la culture de la sneaker."},
+ {movieId:"air", q:"[Précis] Quelle clause financière révolutionnaire la mère de Jordan exige-t-elle d'obtenir sur chaque paire vendue ?", opts:["Un pourcentage sur les ventes de chaque chaussure Air Jordan","10 millions de dollars cash d'avance","Des actions gratuites Nike","Le contrôle total du design"], a:0, pts:2.5, why:"Elle exige un pourcentage sur chaque vente, créant un précédent historique dans le sport pro."},
 
- // --- BLUE CHIPS (Total: 15 pts) ---
- {movieId:"bluechips", q:"Quel acteur incarne Pete Bell, l'entraîneur intègre de Western University poussé à bout par la corruption ?", opts:["Nick Nolte","Gene Hackman","Robert De Niro","Clint Eastwood"], a:0, points:1, why:"Nick Nolte joue le rôle de l'entraîneur passionné Pete Bell."},
- {movieId:"bluechips", q:"Quel futur joueur dominant de la NBA incarne Neon Boudeaux, le prodige recruté par l'université ?", opts:["Shaquille O'Neal","Kobe Bryant","Tim Duncan","Kevin Garnett"], a:0, points:1, why:"Shaquille O'Neal tient le rôle principal de Neon Boudeaux dans sa jeunesse."},
- {movieId:"bluechips", q:"Quel autre joueur NBA célèbre joue le rôle de Butch McRae, l'autre grand talent recruté aux côtés de Neon ?", opts:["Penny Hardaway","Chris Webber","Grant Hill","Jason Kidd"], a:0, points:1, why:"Anfernee 'Penny' Hardaway incarne Butch McRae."},
- {movieId:"bluechips", q:"Quel système de corruption gangrène le recrutement des jeunes lycéens talentueux dans le film ?", opts:["Des enveloppes d'argent liquide, des voitures de luxe et des emplois fictifs pour les proches","Des notes falsifiées à l'université","Des paris sportifs clandestins truqués","Des contrats de télévision secrets"], a:0, points:2, why:"Les boosters (mécènes) versent des pots-de-vin massifs aux familles."},
- {movieId:"bluechips", q:"Quelle est la réaction fracassante de l'entraîneur Pete Bell lors de la conférence de presse finale après la rencontre télévisée ?", opts:["Il démissionne en direct en avouant publiquement le système de corruption","Il accuse les arbitres d'avoir faussé le match","Il annonce qu'il change d'université","Il s'excuse auprès des supporters sans quitter son poste"], a:0, points:2, why:"Pris de remords, il choisit d'avouer toute la vérité en direct à la télévision."},
- {movieId:"bluechips", q:"Quel célèbre entraîneur universitaire de la vie réelle fait une apparition remarquée dans son propre rôle de coach rival ?", opts:["Bobby Knight","Mike Krzyzewski","Dean Smith","John Calipari"], a:0, points:2, why:"L'emblématique Bobby Knight apparaît dans le film."},
- {movieId:"bluechips", q:"Quelle actrice joue Jenny, l'ex-femme de Pete Bell qui tente de le ramener à la raison face à la dérive éthique ?", opts:["Mary McDonnell","Jessica Lange","Sigourney Weaver","Meryl Streep"], a:0, points:1, why:"Mary McDonnell incarne Jenny."},
- {movieId:"bluechips", q:"Quel est le nom de l'université fictive entraînée par Pete Bell dans le film ?", opts:["Western University","Los Angeles State","Midwestern Tech","State University"], a:0, points:1, why:"L'équipe de Western University (les Dolphins) est au cœur de l'intrigue."},
- {movieId:"bluechips", q:"Pourquoi Neon Boudeaux exige-t-il de l'aide financière et une belle voiture pour sa mère avant de signer ?", opts:["Pour assurer le confort et la sécurité de sa famille issue de la grande pauvreté","Pour frimer auprès de ses amis de lycée","Parce que la NCAA l'autorise explicitement","Sur ordre direct de son agent personnel"], a:0, points:2, why:"Il souhaite d'abord mettre sa mère à l'abri du besoin dans sa communauté."},
- {movieId:"bluechips", q:"Quel message principal le film véhicule-t-il sur le sport universitaire américain ?", opts:["La victoire à tout prix et l'argent sale pervertissent l'esprit amateur","Le système est parfaitement juste et transparent","Les études priment toujours sur le basket","Le recrutement de lycéens est sans enjeu financier"], a:0, points:2, why:"Le film dénonce les dérives financières du sport universitaire professionnel déguisé."},
+ // --- BLUE CHIPS ---
+ {movieId:"bluechips", q:"Quel entraîneur volcanique et intègre de Western University est incarné par Nick Nolte ?", opts:["Pete Bell","Coach Carter","Bobby Knight","Don Haskins"], a:0, pts:2.5, why:"Nick Nolte incarne le charismatique Pete Bell."},
+ {movieId:"bluechips", q:"Quel pivot géant et futur Hall of Famer NBA joue le rôle du jeune rookie Neon Boudeaux ?", opts:["Shaquille O'Neal","Alonzo Mourning","Patrick Ewing","David Robinson"], a:0, pts:2.5, why:"Shaquille O'Neal y joue son premier grand rôle au cinéma."},
+ {movieId:"bluechips", q:"Quel meneur NBA d'exception (coéquipier de Shaq aux Magic) joue le rôle de Butch McRae ?", opts:["Anfernee 'Penny' Hardaway","Jason Kidd","Gary Payton","Steve Nash"], a:0, pts:2.5, why:"Penny Hardaway donne la réplique à Shaquille O'Neal."},
+ {movieId:"bluechips", q:"Quel problème éthique majeur du sport universitaire américain est dénoncé dans le film ?", opts:["Le versement illégal d'argent et de cadeaux pour recruter des lycéens","Le dopage systématique","Les matchs truqués par les arbitres","La falsification des âges"], a:0, pts:2.5, why:"Les cadeaux en sous-main aux familles de recrues (boosters) sont au centre de l'intrigue."},
+ {movieId:"bluechips", q:"[Précis] Que fait l'entraîneur Pete Bell lors de la conférence de presse après la grande victoire télévisée ?", opts:["Il avoue publiquement la corruption et démissionne en direct","Il insulte le président de l'université","Il annonce sa signature en NBA","Il refuse de parler aux journalistes"], a:0, pts:2.5, why:"Rongé par la culpabilité d'avoir triché, il déballe toute la vérité devant les caméras."},
 
- // --- GLORY ROAD (Total: 10 pts) ---
- {movieId:"glory", q:"En quelle année se déroule la saison historique de l'équipe universitaire de Texas Western racontée dans le film ?", opts:["1966","1972","1958","1980"], a:0, points:1, why:"La saison légendaire de Texas Western a lieu en 1966."},
- {movieId:"glory", q:"Quel est le nom de l'entraîneur audacieux qui recrute des joueurs noirs et blancs sans distinction de couleur ?", opts:["Don Haskins","John Wooden","Adolph Rupp","Dean Smith"], a:0, points:1, why:"Don Haskins révolutionne le championnat universitaire."},
- {movieId:"glory", q:"Quel est le prénom du meneur de jeu charismatique et ultra-rapide qui guide l'équipe vers le titre ?", opts:["Bobby Joe Hill","Nevil Shed","David Lattin","Willie Worsley"], a:0, points:1, why:"Bobby Joe Hill brille par son talent et sa vitesse en finale."},
- {movieId:"glory", q:"Contre quelle prestigieuse université ultra-favorite Texas Western joue-t-elle la grande finale nationale ?", opts:["Kentucky Wildcats","UCLA Bruins","Duke Blue Devils","North Carolina Tar Heels"], a:0, points:1, why:"Ils affrontent les redoutables Wildcats du Kentucky en finale."},
- {movieId:"glory", q:"Quelle décision historique et révolutionnaire l'entraîneur Don Haskins prend-il pour le 5 majeur de cette finale ?", opts:["Il aligne exclusivement cinq joueurs noirs sur le terrain","Il fait jouer tous les remplaçants en première mi-temps","Il ne prend aucun temps mort de tout le match","Il commence sans meneur de jeu titulaire"], a:0, points:1, why:"C'est la toute première fois qu'une équipe aligne un 5 majeur 100 % noir en finale NCAA."},
- {movieId:"glory", q:"Quelles graves discriminations les joueurs subissent-ils lors de leurs déplacements sportifs dans le Sud ?", opts:["Des insultes racistes, du vandalisme dans leurs vestiaires et des refus d'hébergement","Des agressions physiques directes sur le parquet","Interdiction de s'entraîner en public","Le vol de leurs équipements de match"], a:0, points:1, why:"L'équipe fait face à un racisme violent et institutionnalisé lors de ses déplacements."},
- {movieId:"glory", q:"Quel acteur Hollywoodien incarne avec intensité l'entraîneur Don Haskins ?", opts:["Josh Lucas","Matt Damon","Mark Wahlberg","Bradley Cooper"], a:0, points:1, why:"Josh Lucas prête ses traits au coach Don Haskins."},
- {movieId:"glory", q:"Quel célèbre producteur hollywoodien est derrière la réalisation et la production de ce film inspirant ?", opts:["Jerry Bruckheimer","Steven Spielberg","Ron Howard","Martin Scorsese"], a:0, points:1, why:"Jerry Bruckheimer a produit ce drame sportif biographique."},
- {movieId:"glory", q:"Quel score final permet à Texas Western de s'imposer face à Kentucky pour soulever le trophée ?", opts:["72 à 65","85 à 80","60 à 58","90 à 75"], a:0, points:1, why:"Texas Western remporte la finale historique sur le score de 72 à 65."},
- {movieId:"glory", q:"Dans quelle ville est située l'université de Texas Western (aujourd'hui University of Texas at El Paso) ?", opts:["El Paso","Austin","San Antonio","Dallas"], a:0, points:1, why:"L'université est implantée à El Paso, au Texas."}
+ // --- GLORY ROAD ---
+ {movieId:"glory", q:"Quelle université texane entre dans l'histoire du basket lors du championnat NCAA 1966 ?", opts:["Texas Western","UT Austin","Houston Cougars","Texas A&M"], a:0, pts:2.5, why:"L'équipe des Miners de Texas Western marque l'histoire du sport."},
+ {movieId:"glory", q:"Quel est le nom du coach audacieux qui recrute sans tenir compte des barrières raciales de l'époque ?", opts:["Don Haskins","Ken Carter","John Wooden","Dean Smith"], a:0, pts:2.5, why:"Don Haskins fait le pari du talent et de la justice sociale."},
+ {movieId:"glory", q:"Contre quelle université archi-favorite et conservatrice jouent-ils la grande finale ?", opts:["Kentucky","UCLA","Duke","North Carolina"], a:0, pts:2.5, why:"Ils affronte l'équipe de Kentucky menée par le coach Adolph Rupp."},
+ {movieId:"glory", q:"Quel est le thème historique fondamental abordé tout au long du film ?", opts:["La lutte contre la ségrégation et le racisme dans le sport","L'invention du tir à trois points","Le passage du basket amateur au secteur privé","La rivalité entre deux villes"], a:0, pts:2.5, why:"Le film montre le courage de l'équipe face aux discriminations raciales."},
+ {movieId:"glory", q:"[Précis] Quelle décision tactique et historique Don Haskins prend-il pour le 5 majeur de la finale nationale ?", opts:["Aligner un cinq majeur composé à 100 % de joueurs noirs","Jouer tout le match sans faire aucun remplacement","Commencer le match avec 5 meneurs de jeu","Refuser de faire un temps mort"], a:0, pts:2.5, why:"C'est la première fois dans l'histoire de la NCAA qu'un 5 majeur intégralement noir débute une finale."},
+
+ // --- SHAQUILLE O'NEAL IMPOSE SON STYLE ---
+ {movieId:"shaqstyle", q:"Dans ce docu-série, quelle marque de sportswear mythique Shaq et Allen Iverson cherchent-ils à relancer ?", opts:["Reebok","Puma","AND1","Under Armour"], a:0, pts:2.5, why:"Ils prennent la direction de Reebok Basketball pour lui redonner son aura streetwear."},
+ {movieId:"shaqstyle", q:"Quelle autre légende vivante du basket et icône des années 2000 s'associe à Shaq dans cette aventure ?", opts:["Allen Iverson","Tracy McGrady","Vince Carter","Dennis Rodman"], a:0, pts:2.5, why:"Allen Iverson co-dirige la branche basket avec Shaquille O'Neal."},
+ {movieId:"shaqstyle", q:"Sur quelle plateforme de streaming ce documentaire passionnant est-il diffusé ?", opts:["Netflix","Prime Video","Disney+","Apple TV"], a:0, pts:2.5, why:"La série documentaire est produite et diffusée par Netflix."},
+ {movieId:"shaqstyle", q:"Quel double rôle Shaq et Iverson occupent-ils au sein de l'entreprise ?", opts:["Dirigeants / Dirigeants de la division Basketball","Entraîneurs d'équipe","Mannequins pour les publicités","Designers textiles uniques"], a:0, pts:2.5, why:"Ils deviennent Présidents et Vice-Présidents de la division Basketball de la marque."},
+ {movieId:"shaqstyle", q:"[Précis] Quel modèle de sneaker signature légendaire créé pour Iverson dans les années 90 est réédité dans la série ?", opts:["The Question / Answer","Shaq Attaq","Pump Omni Zone","Kamikaze"], a:0, pts:2.5, why:"Les modèles Answer / Question d'Allen Iverson font partie intégrante de leur stratégie de relance."}
 ];
 
 let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","team":"","points":0,"watched":[],"quizBest":0}');
@@ -177,7 +150,7 @@ function renderMovies(){
     <p>${m.pitch}</p>
     <p><strong>À retenir :</strong> ${m.learn}</p>
     <a class="btn secondary" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(m.search)}">Où le regarder ? ↗</a>
-    <p><label><input type="checkbox" style="width:auto;margin-right:7px" ${data.watched.includes(m.id)?"checked":""} onchange="toggleWatched('${m.id}',this.checked)"> J'ai vu ce film</label></p>
+    <p><label><input type="checkbox" style="width:auto;margin-right:7px" ${data.watched.includes(m.id)?"checked":""} onchange="toggleWatched('${m.id}',this.checked)"> J'ai vu ce film / docu</label></p>
    </div>
   </article>`).join("");
 }
@@ -195,9 +168,9 @@ function renderProfile(){
  if(name&&document.activeElement!==name)name.value=data.name||"";
  if(team&&document.activeElement!==team)team.value=data.team||"";
  let pts=document.getElementById("profilePoints");
- if(pts)pts.textContent=data.points||0;
+ if(pts)pts.textContent=Math.round(data.points||0);
  let watched=document.getElementById("profileWatched");
- if(watched)watched.textContent=(data.watched||[]).length+"/7";
+ if(watched)watched.textContent=(data.watched||[]).length+"/8";
  let badge=document.getElementById("profileBadge");
  if(badge){
   let b=data.points>=85?"🏆 MVP du Cinéma Basket":data.points>=60?"🎬 Cinéphile All-Star":data.points>=30?"🧠 Coach en devenir":"🏀 Rookie Cinéphile";
@@ -220,13 +193,12 @@ let current=0,sessionScore=0,answered=false;
 
 function startQuiz(){
  let area=document.getElementById("quizArea");
- // Filtrer les questions uniquement pour les films marqués comme "vus"
  activeQuestions = questions.filter(q => data.watched.includes(q.movieId));
  
  if(activeQuestions.length === 0){
   area.innerHTML=`
-   <div class="notice">🔒 <strong>Aucun film débloqué !</strong><br>Tu dois marquer au moins un film comme « Vu » dans l'onglet <strong>🎬 Films</strong> pour débloquer ses questions de quiz.</div>
-   <button style="margin-top:14px" onclick="showTab('films')">Aller voir les films →</button>
+   <div class="notice">🔒 <strong>Aucun titre débloqué !</strong><br>Tu dois marquer au moins un film ou un documentaire comme « Vu » dans l'onglet <strong>🎬 Films & Docus</strong> pour débloquer le quiz correspondant.</div>
+   <button style="margin-top:14px" onclick="showTab('films')">Aller voir la liste →</button>
   `;
   return;
  }
@@ -244,11 +216,11 @@ function renderQuestion(){
   data.points=Math.min(100,(data.points||0)+sessionScore);
   data.quizBest=Math.max(data.quizBest||0,sessionScore);
   save();
-  let maxPossible = activeQuestions.reduce((acc,q)=>acc+q.points,0);
+  let maxPossible = activeQuestions.reduce((acc,q)=>acc+q.pts,0);
   area.innerHTML=`
-   <h3>🏁 Session de quiz terminée !</h3>
-   <div class="score">${sessionScore} / ${maxPossible} pts</div>
-   <p>${sessionScore>=80?"MVP ! Tu connais par cœur les moindres détails des films.":sessionScore>=40?"Belle performance, continue à visionner les films pour progresser !":"Découvre d'autres films dans l'onglet Films pour débloquer plus de questions et marquer plus de points !"} Ton score a été enregistré.</p>
+   <h3>🏁 Quiz terminé !</h3>
+   <div class="score">${Math.round(sessionScore)} / ${Math.round(maxPossible)} pts</div>
+   <p>${sessionScore>=80?"MVP ! Tu connais vraiment tes classiques sur le bout des doigts !":sessionScore>=40?"Belle performance, continue de regarder des films pour marquer encore plus de points !":"Regarde d'autres films et docus dans la liste pour débloquer la suite du quiz !"} Ton score a été enregistré.</p>
    <button onclick="startQuiz()">Rejouer le quiz</button>
   `;
   return;
@@ -257,7 +229,7 @@ function renderQuestion(){
  let q=activeQuestions[current];
  answered=false;
  area.innerHTML=`
-  <div class="small">Question ${current+1} sur ${activeQuestions.length} · <span style="color:var(--orange)">Valeur : ${q.points} pt${q.points>1?'s':''}</span></div>
+  <div class="small">Question ${current+1} sur ${activeQuestions.length} · <span style="color:var(--orange)">Valeur : ${q.pts} pts</span></div>
   <h3>${q.q}</h3>
   <div id="options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>
   <div id="feedback"></div>
@@ -275,23 +247,23 @@ function answer(i){
   if(j===i&&i!==q.a)b.classList.add("wrong");
  });
  if(i===q.a){
-  sessionScore+=q.points;
-  document.getElementById("liveScore").textContent=sessionScore;
+  sessionScore+=q.pts;
+  document.getElementById("liveScore").textContent=Math.round(sessionScore);
  }
- document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>${i===q.a?"✅ Bonne réponse ! ("+q.points+" pt"+(q.points>1?'s':'')+":)":"❌ Pas tout à fait."}</strong><br>${q.why}</div>`;
+ document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>${i===q.a?"✅ Bonne réponse ! (+"+q.pts+" pts)":"❌ Pas tout à fait."}</strong><br>${q.why}</div>`;
  document.getElementById("nextBtn").classList.remove("hidden");
 }
 
 function renderLeaderboard(){
  let el=document.getElementById("leaderboard");
  if(!el)return;
- el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · "+escapeHtml(data.team):""}</span><strong>${data.points||0} / 100 pts</strong></div><p class="small">Meilleur score : ${data.quizBest||0} pts · Films vus : ${(data.watched||[]).length}/7</p>`;
+ el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · "+escapeHtml(data.team):""}</span><strong>${Math.round(data.points||0)} / 100 pts</strong></div><p class="small">Meilleur score : ${Math.round(data.quizBest||0)} pts · Vus : ${(data.watched||[]).length}/8</p>`;
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 function shareProgress(){
- let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" ("+data.team+")":""}\nPoints : ${data.points||0}/100\nFilms vus : ${(data.watched||[]).length}/7\nÀ toi de jouer !`;
+ let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" ("+data.team+")":""}\nPoints : ${Math.round(data.points||0)}/100\nProgression : ${(data.watched||[]).length}/8 vus\nÀ toi de jouer !`;
  if(navigator.share)navigator.share({title:"Challenge Basket & Cinéma",text:msg}).catch(()=>{});
  else if(navigator.clipboard)navigator.clipboard.writeText(msg).then(()=>alert("Progression copiée ! Colle-la dans le groupe de l'équipe."));
  else prompt("Copie ta progression :",msg);
