@@ -16,8 +16,8 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 .tab{background:#18253a;color:var(--muted);border:1px solid var(--line);padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}.tab.active{background:var(--orange);color:#1b140d;border-color:var(--orange)}
 .panel{background:rgba(18,29,48,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.movie{overflow:hidden;padding:0}.poster{min-height:125px;background:linear-gradient(135deg,#273c59,#121d30);display:grid;place-items:center;font-size:3.2rem;border-bottom:1px solid var(--line)}.movie-content{padding:16px}.movie h3{margin:0 0 5px;font-size:1.15rem}.meta{font-size:.85rem;color:var(--orange);font-weight:700}.movie p{font-size:.94rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0;color:var(--muted);font-size:.9rem}input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #3a4b66;background:#0c1524;color:var(--text);font:inherit}.quiz-option{display:block;width:100% !important;text-align:left;margin:8px 0;background:#23334c;color:var(--text);border:1px solid #3a4b66}.quiz-option.correct{border-color:var(--green);background:#143b35}.quiz-option.wrong{border-color:#ff7979;background:#45232a}.feedback{padding:12px;border-radius:12px;background:#1c2d43;margin:12px 0}.small{font-size:.85rem;color:var(--muted)}.score{font-size:2rem;font-weight:900;color:var(--orange)}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;background:#20334b;border-radius:99px;font-size:.8rem}.leader-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 18px}a{color:#ffb36f}.notice{border-left:3px solid var(--orange);padding:10px 13px;background:#1c293c;border-radius:0 10px 10px 0;color:#d9e2ef}
 .team-card{background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-.player-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:14px 0}
-.player-check-item{background:#0c1524;border:1px solid #3a4b66;padding:8px 10px;border-radius:8px;font-size:.88rem;display:flex;align-items:center;gap:8px}
+.player-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:14px 0}
+.player-check-item{background:#0c1524;border:1px solid #3a4b66;padding:8px 10px;border-radius:8px;font-size:.88rem;display:flex;align-items:center;justify-content:space-between}
 .player-check-item.ready{border-color:var(--green);background:#102b26}
 .progress-bar-container{background:#0c1524;border-radius:10px;height:22px;width:100%;overflow:hidden;border:1px solid var(--line);margin:6px 0}
 .progress-bar-fill{background:linear-gradient(90deg,var(--orange),#ffaa5b);height:100%;transition:width .5s ease}
@@ -50,22 +50,25 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
      <option value="">-- Choisis ton prénom --</option>
     </select>
    </label>
-   <label class="field">Ton équipe
-    <input id="modalTeamDisplay" disabled value="-- Sélectionne ton prénom --" style="background:#18253a;color:var(--orange);font-weight:700">
+   <label class="field">Statut du profil
+    <input id="modalProfileStatus" disabled value="-- Sélectionne ton prénom --" style="background:#18253a;color:var(--orange);font-weight:700">
    </label>
-   <label class="field">Ton Code PIN (4 chiffres)
+   <label class="field">Ton équipe
+    <input id="modalTeamDisplay" disabled value="-- Sélectionne ton prénom --" style="background:#18253a;color:var(--text)">
+   </label>
+   <label class="field"><span id="pinInputLabel">Ton Code PIN (4 chiffres)</span>
     <input type="password" id="modalPlayerPin" maxlength="4" placeholder="Ex: 1234">
    </label>
+   <p class="small" id="pinHelpText" style="color:var(--muted)">Si c'est ta 1ère connexion, le code saisi deviendra ton code PIN secret.</p>
    <button style="width:100%;margin-top:10px" onclick="loginAsPlayer()">Entrer dans l'application →</button>
   </div>
 
   <!-- Formulaire Admin -->
   <div id="authAdminForm" class="hidden">
    <label class="field">Code PIN Coach Vincent
-    <input type="password" id="adminPinInput" maxlength="6" placeholder="Entrer le code PIN">
+    <input type="password" id="adminPinInput" maxlength="6" placeholder="Entrer le code PIN secret">
    </label>
    <button style="width:100%;margin-top:10px" onclick="loginAsAdmin()">Se connecter en Admin →</button>
-   <p class="small" style="margin-top:10px">Code PIN Coach : <strong style="color:var(--orange)">0926</strong></p>
   </div>
  </div>
 </div>
@@ -140,7 +143,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
  <section id="profil" class="view hidden">
   <div class="panel">
    <h2>Mon profil joueur</h2>
-   <form id="profileForm">
+   <form id="profileForm" onsubmit="event.preventDefault()">
     <label class="field">Mon Prénom
      <input id="displayPlayerName" disabled style="background:#18253a">
     </label>
@@ -303,12 +306,28 @@ function getTeamForPlayer(playerName){
 
 function onModalPlayerSelect(){
  let pName = document.getElementById("modalPlayerName").value;
- let display = document.getElementById("modalTeamDisplay");
+ let displayTeam = document.getElementById("modalTeamDisplay");
+ let displayStatus = document.getElementById("modalProfileStatus");
+ let pinHelp = document.getElementById("pinHelpText");
+
  if(!pName){
-  display.value = "-- Sélectionne ton prénom --";
+  displayStatus.value = "-- Sélectionne ton prénom --";
+  displayTeam.value = "-- Sélectionne ton prénom --";
   return;
  }
- display.value = getTeamForPlayer(pName);
+
+ displayTeam.value = getTeamForPlayer(pName);
+
+ // Détections si le profil a déjà un PIN enregistré
+ if(playerPins[pName]){
+  displayStatus.value = "🔒 Profil déjà créé";
+  displayStatus.style.color = "var(--green)";
+  pinHelp.textContent = "Entre le code PIN à 4 chiffres défini lors de ta 1ère connexion.";
+ } else {
+  displayStatus.value = "🆕 Nouveau profil à créer";
+  displayStatus.style.color = "var(--orange)";
+  pinHelp.textContent = "Choisis un code PIN à 4 chiffres. Il servira à verrouiller ton compte !";
+ }
 }
 
 function loginAsPlayer(){
@@ -316,14 +335,17 @@ function loginAsPlayer(){
  let pin = document.getElementById("modalPlayerPin").value.trim();
 
  if(!name){ alert("Veuillez sélectionner votre prénom !"); return; }
- if(!pin){ alert("Veuillez entrer votre code PIN !"); return; }
+ if(!pin || pin.length < 4){ alert("Veuillez entrer un code PIN à 4 chiffres !"); return; }
 
- // Vérification ou création du PIN joueur
- if(playerPins[name] && playerPins[name] !== pin){
-  alert("❌ Code PIN incorrect pour " + name + " !");
-  return;
- } else if(!playerPins[name]){
-  playerPins[name] = pin; // Enregistrement du premier PIN pour ce joueur
+ // Contrôle du PIN : Création ou Vérification
+ if(playerPins[name]){
+  if(playerPins[name] !== pin){
+   alert("❌ Code PIN incorrect pour " + name + " !");
+   return;
+  }
+ } else {
+  // 1ère connexion : Verrouillage du PIN
+  playerPins[name] = pin;
  }
 
  session = { role: 'player', name: name };
@@ -345,6 +367,14 @@ function loginAsAdmin(){
  session = { role: 'admin', name: 'Coach Vincent' };
  save();
  checkSession();
+}
+
+function resetPlayerPin(playerName){
+ if(confirm(`Voulez-vous réinitialiser le code PIN de ${playerName} ?`)){
+  delete playerPins[playerName];
+  save();
+  alert(`Code PIN de ${playerName} réinitialisé ! Il pourra choisir un nouveau PIN.`);
+ }
 }
 
 function logout(){
@@ -442,9 +472,13 @@ function renderChecklist(){
  if(!grid) return;
  grid.innerHTML = ROSTER.map(p => {
   let isReady = readyPlayers.includes(p);
+  let isAdmin = session && session.role === 'admin';
   return `<div class="player-check-item ${isReady?'ready':''}">
-   <input type="checkbox" ${isReady?'checked':''} disabled>
-   <span>${p}</span>
+   <div>
+    <input type="checkbox" ${isReady?'checked':''} disabled>
+    <span style="margin-left:6px">${p}</span>
+   </div>
+   ${isAdmin && playerPins[p] ? `<button style="padding:2px 6px;font-size:.7rem;background:#3a4b66" onclick="resetPlayerPin('${p}')">Reset PIN</button>` : ''}
   </div>`;
  }).join("");
  let cnt = document.getElementById("readyCount");
@@ -581,7 +615,7 @@ function runDraft(force){
   </div>
  `).join("");
 
- teamsData = {}; // Réinitialiser les équipes
+ teamsData = {};
  Object.keys(generatedTeams).forEach(tName => {
   teamsData[tName] = {};
   generatedTeams[tName].forEach(p => {
@@ -751,7 +785,7 @@ function shareProgress(){
 }
 
 function exportProgress(){
- let blob=new Blob([JSON.stringify({player: data, teams: teamsData, ready: readyPlayers, attempts: teamAttempts},null,2)],{type:"application/json"});
+ let blob=new Blob([JSON.stringify({player: data, teams: teamsData, ready: readyPlayers, attempts: teamAttempts, pins: playerPins},null,2)],{type:"application/json"});
  let a=document.createElement("a");
  a.href=URL.createObjectURL(blob);
  a.download="basket-cinema.json";
@@ -759,7 +793,7 @@ function exportProgress(){
 }
 
 window.onload = function(){
- session = null; // Reamener systématiquement sur la modale d'identification
+ session = null; // Ramener systématiquement sur la modale d'identification
  checkSession();
 }
 </script>
