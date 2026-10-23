@@ -159,6 +159,15 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
      </div>
     </label>
    </form>
+
+   <!-- AFFICHAGE DES COÉQUIPIERS DE L'ÉQUIPE DU JOUEUR -->
+   <div style="background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px">
+    <h3 style="margin-top:0;font-size:1.05rem;color:var(--orange)">👥 Mes coéquipiers dans cette équipe</h3>
+    <div id="playerTeamTeammatesList" style="margin-top:6px;font-size:.92rem;color:var(--text)">
+     <em>Aucun coéquipier pour l'instant.</em>
+    </div>
+   </div>
+
    <div class="panel" style="margin-top:18px">
     <h3>Ma progression personnelle</h3>
     <div class="row">
@@ -711,7 +720,6 @@ function updatePlayerTeam(){
   return;
  }
  
- // Nettoyer l'ancienne association si elle existait
  if(data.team && teamsData[data.team] && teamsData[data.team][data.name]){
   delete teamsData[data.team][data.name];
  }
@@ -739,6 +747,24 @@ function renderProfile(){
  let inputTeam = document.getElementById("teamName");
  if(inputName) inputName.value = data.name || "";
  if(inputTeam) inputTeam.value = data.team || "Non attribuée";
+
+ // Affichage de la liste des coéquipiers
+ let teammatesContainer = document.getElementById("playerTeamTeammatesList");
+ if(teammatesContainer){
+  if(data.team && teamsData[data.team]){
+   let members = Object.keys(teamsData[data.team]);
+   if(members.length > 0){
+    teammatesContainer.innerHTML = members.map(m => {
+     let isMe = m === data.name;
+     return `<span class="tag" style="${isMe?'background:var(--orange);color:#1b140d':''}">${m} ${isMe?'(Moi)':''}</span>`;
+    }).join(" ");
+   } else {
+    teammatesContainer.innerHTML = "<em>Aucun coéquipier pour l'instant.</em>";
+   }
+  } else {
+   teammatesContainer.innerHTML = "<em>Attends le tirage au sort ou choisis ton équipe ci-dessus.</em>";
+  }
+ }
 
  let pts = document.getElementById("profilePoints");
  if(pts) pts.textContent = Math.round(data.points||0);
@@ -914,8 +940,10 @@ function answer(i){
  let q=activeQuestions[current];
  document.querySelectorAll(".quiz-option").forEach((b,j)=>{
   b.disabled=true;
-  if(j===q.a)b.classList.add("correct");
-  if(j===i&&i!==q.a)b.classList.add("wrong");
+  // Ne mettre en vert QUE si la réponse choisie est la bonne
+  if(j===i && i===q.a) b.classList.add("correct");
+  // Mettre en rouge si la réponse choisie est fausse
+  if(j===i && i!==q.a) b.classList.add("wrong");
  });
  if(i===q.a) sessionScore+=q.pts;
  document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>Réponse enregistrée.</strong></div>`;
