@@ -96,15 +96,6 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
   <div class="hero-badge" aria-hidden="true">🎬🏀</div>
  </section>
 
- <!-- TABLEAU DE BORD DE LA 1ÈRE PAGE -->
- <div class="panel" style="margin-top:20px">
-  <h3>📊 Graphique de progression par équipe</h3>
-  <p class="small">Classement en direct des points cumulés par équipe :</p>
-  <div id="homeTeamChart">
-   <p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment.</p>
-  </div>
- </div>
-
  <nav aria-label="Navigation">
   <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films & Docus</button>
   <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
@@ -186,7 +177,16 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     </div>
    </div>
 
-   <!-- BARRE DE PROGRESSION GLOBALE DES INSCRIPTIONS RECULÉE CÔTÉ ADMIN -->
+   <!-- DÉPLACÉ DANS L'ADMIN : GRAPHIQUE DE PROGRESSION DES ÉQUIPES -->
+   <div style="background:#18253a;border:1px solid var(--line);border-radius:12px;padding:16px;margin:20px 0">
+    <h3 style="margin-top:0">📊 Graphique de progression par équipe</h3>
+    <p class="small">Classement en direct des points cumulés par équipe :</p>
+    <div id="homeTeamChart">
+     <p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment.</p>
+    </div>
+   </div>
+
+   <!-- BARRE DE PROGRESSION GLOBALE DES INSCRIPTIONS ADMIN -->
    <div style="background:#18253a;border:1px solid var(--line);border-radius:12px;padding:14px;margin:20px 0">
     <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:6px">
      <span>👥 Profils Créés / Inscriptions</span>
@@ -233,7 +233,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
  <section id="classement" class="view hidden">
   <div class="panel">
    <h2>🏆 Classement général des Équipes</h2>
-   <p>Les scores collectifs et le nombre de tentatives utilisées s'affichent ci-dessous.</p>
+   <p>Les scores collectifs, le nombre de tentatives et les membres de chaque équipe s'affichent ci-dessous.</p>
    <div id="teamLeaderboard"></div>
    <hr style="border-color:var(--line);margin:20px 0">
    <h3>Mon profil sur cet appareil</h3>
@@ -949,21 +949,24 @@ function renderLeaderboard(){
   let teamSummary = [];
   Object.keys(teamsData).forEach(tName => {
    let members = teamsData[tName];
+   let memberNames = Object.keys(members);
    let totalPts = 0;
-   let count = 0;
-   Object.keys(members).forEach(m => {
+   memberNames.forEach(m => {
     totalPts += members[m].points || 0;
-    count++;
    });
-   teamSummary.push({ name: tName, totalPoints: totalPts, memberCount: count, attempts: teamAttempts[tName] || 0 });
+   teamSummary.push({ name: tName, totalPoints: totalPts, memberList: memberNames, attempts: teamAttempts[tName] || 0 });
   });
 
   teamSummary.sort((a,b) => b.totalPoints - a.totalPoints);
   teamEl.innerHTML = teamSummary.map((t, rank) => `
    <div class="team-card">
     <div class="row">
-     <div><strong>${rank===0?"🥇":rank===1?"🥈":rank===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberCount} joueurs)</div>
+     <div><strong>${rank===0?"🥇":rank===1?"🥈":rank===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberList.length} joueurs)</div>
      <div style="text-align:right"><strong style="color:var(--orange);font-size:1.2rem">${Math.round(t.totalPoints)} pts</strong></div>
+    </div>
+    <div style="margin:8px 0 4px">
+     <span class="small" style="color:var(--muted)">Joueurs : </span>
+     ${t.memberList.length > 0 ? t.memberList.map(m => `<span class="tag">${escapeHtml(m)}</span>`).join(" ") : "<em>Aucun joueur</em>"}
     </div>
     <div class="small">Tentatives utilisées : ${t.attempts} / 2</div>
    </div>
