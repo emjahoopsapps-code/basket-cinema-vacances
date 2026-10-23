@@ -19,37 +19,80 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 .player-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:14px 0}
 .player-check-item{background:#0c1524;border:1px solid #3a4b66;padding:8px 10px;border-radius:8px;font-size:.88rem;display:flex;align-items:center;gap:8px}
 .player-check-item.ready{border-color:var(--green);background:#102b26}
-
-/* Styles pour les graphiques de progression */
 .progress-bar-container{background:#0c1524;border-radius:10px;height:22px;width:100%;overflow:hidden;border:1px solid var(--line);margin:6px 0}
 .progress-bar-fill{background:linear-gradient(90deg,var(--orange),#ffaa5b);height:100%;transition:width .5s ease}
 .movie-card-disabled{opacity:0.6;filter:grayscale(0.4)}
+
+/* Modal d'identification plein écran */
+#authModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(7,11,18,0.96);z-index:9999;display:grid;place-items:center;padding:20px}
+.auth-box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:30px;width:100%;max-width:480px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero-badge{display:none}.grid{grid-template-columns:1fr}.panel{padding:16px}nav button{flex:1}}
 </style>
 </head>
 <body>
+
+<!-- MODAL D'IDENTIFICATION AU CHARGEMENT -->
+<div id="authModal">
+ <div class="auth-box">
+  <div class="eyebrow" style="margin-bottom:8px">🏀 Sécurité & Accès</div>
+  <h2>Identification</h2>
+  <p>Choisis ton profil pour accéder au challenge ou connecte-toi en tant qu'administrateur.</p>
+  
+  <div style="display:flex;gap:8px;margin:16px 0">
+   <button id="tabPlayerBtn" class="tab active" onclick="switchAuthTab('player')">👤 Je suis un Joueur</button>
+   <button id="tabAdminBtn" class="tab" onclick="switchAuthTab('admin')">🔑 Admin / Coach</button>
+  </div>
+
+  <!-- Formulaire Joueur -->
+  <div id="authPlayerForm">
+   <label class="field">Sélectionne ton prénom
+    <select id="modalPlayerName">
+     <option value="">-- Choisis ton prénom --</option>
+    </select>
+   </label>
+   <label class="field">Nom de ton équipe
+    <input id="modalTeamName" maxlength="30" placeholder="Ex. Team Dunk">
+   </label>
+   <button style="width:100%;margin-top:10px" onclick="loginAsPlayer()">Entrer dans l'application →</button>
+  </div>
+
+  <!-- Formulaire Admin -->
+  <div id="authAdminForm" class="hidden">
+   <label class="field">Code PIN Administrateur
+    <input type="password" id="adminPinInput" maxlength="6" placeholder="Entrer le code PIN">
+   </label>
+   <button style="width:100%;margin-top:10px" onclick="loginAsAdmin()">Se connecter en Admin →</button>
+   <p class="small" style="margin-top:10px">Code PIN par défaut : <strong style="color:var(--orange)">2026</strong></p>
+  </div>
+ </div>
+</div>
+
 <header>
  <div class="eyebrow">🏀 Le défi des vacances</div>
  <h1>Basket <span style="color:var(--orange)">&</span> Cinéma</h1>
  <p>Découvre les films et documentaires en équipe. Valide les œuvres à plusieurs pour débloquer les quiz !</p>
- <span class="tag">17 Joueurs</span><span class="tag">Collaboration d'équipe</span><span class="tag">100 % sur mobile</span>
+ <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+  <span class="tag" id="userSessionBadge">Connecté</span>
+  <button class="secondary" style="padding:4px 10px;font-size:.8rem" onclick="logout()">Changer d'utilisateur 🔄</button>
+ </div>
 </header>
+
 <main>
  <section class="hero">
   <div>
    <h2>Prêt à devenir le MVP du cinéma basket ?</h2>
-   <p>Crée d'abord ton profil, forme ou personnalise ton équipe, puis visionnez les œuvres ensemble.</p>
-   <button onclick="showTab('profil')">Créer mon profil →</button>
+   <p>Visionnez les œuvres en équipe, validez-les et affrontez les autres groupes sur le quiz !</p>
+   <button onclick="showTab('films')">Voir les films & docus →</button>
   </div>
   <div class="hero-badge" aria-hidden="true">🎬🏀</div>
  </section>
 
- <!-- TABLEAU DE BORD DE LA 1ÈRE PAGE : PROGRESSION DES PROFILS + GRAPHIQUE PAR ÉQUIPE -->
+ <!-- TABLEAU DE BORD DE LA 1ÈRE PAGE -->
  <div class="panel" style="margin-top:20px">
   <div class="row">
    <div>
     <h3>👥 Progression des profils créés</h3>
-    <p class="small">Nombre de joueurs inscrits avant le tirage au sort des équipes :</p>
+    <p class="small">Nombre de joueurs inscrits :</p>
     <div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:4px">
      <span>Inscriptions</span>
      <span id="heroReadyCount">0 / 17 Joueurs</span>
@@ -65,14 +108,14 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
   <h3>📊 Graphique de progression par équipe</h3>
   <p class="small">Classement en direct des points cumulés par équipe :</p>
   <div id="homeTeamChart">
-   <p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment. Allez dans Profil & Draft !</p>
+   <p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment.</p>
   </div>
  </div>
 
  <nav aria-label="Navigation">
   <button class="tab active" data-tab="films" onclick="showTab('films')">🎬 Films & Docus</button>
   <button class="tab" data-tab="quiz" onclick="showTab('quiz')">🧠 Quiz</button>
-  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Profil & Draft</button>
+  <button class="tab" data-tab="profil" onclick="showTab('profil')">👤 Mon Profil</button>
   <button class="tab" data-tab="classement" onclick="showTab('classement')">🏆 Scores Équipes</button>
  </nav>
 
@@ -93,18 +136,15 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
  <section id="profil" class="view hidden">
   <div class="panel">
-   <h2>Ton profil joueur</h2>
-   <p class="small" style="color:var(--orange)">⚠️ Tu dois obligatoirement enregistrer ton profil pour interagir avec les films et les quiz.</p>
+   <h2>Mon profil joueur</h2>
    <form id="profileForm">
-    <label class="field">1. Sélectionne ton prénom
-     <select id="playerName" required onchange="onPlayerSelectChange()">
-      <option value="">-- Choisis ton prénom --</option>
-     </select>
+    <label class="field">Mon Prénom
+     <input id="displayPlayerName" disabled style="background:#18253a">
     </label>
-    <label class="field">2. Nom de ton équipe (Personnalisable à tout moment)
+    <label class="field">Nom de mon équipe (Personnalisable)
      <input id="teamName" maxlength="30" placeholder="Ex. Les Panthers du Panier" required>
     </label>
-    <button type="submit">Enregistrer mon profil / Personnaliser mon équipe</button>
+    <button type="submit">Mettre à jour le nom de mon équipe</button>
    </form>
    <div id="profileStatus" class="feedback hidden"></div>
    <div class="panel" style="margin-top:18px">
@@ -117,9 +157,10 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
    </div>
   </div>
 
-  <div class="panel">
-   <h2>🎲 Émargement & Tirage au sort des équipes (17 Joueurs)</h2>
-   <p>Dès qu'un joueur sélectionne son prénom, sa case se coche automatiquement.</p>
+  <!-- PANNEAU RÉSERVÉ À L'ADMIN (CACHÉ AUX JOUEURS) -->
+  <div class="panel hidden" id="adminPanelContainer">
+   <h2>🔑 Panneau Administrateur / Coach</h2>
+   <p>Réservé au coach : suivi de l'émargement des 17 joueurs et outil de tirage au sort des équipes.</p>
    <div class="row" style="margin-bottom:10px">
     <div><span class="score" id="readyCount">0 / 17</span> <span class="small">joueurs prêts</span></div>
    </div>
@@ -127,7 +168,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
     <button id="draftBtn" onclick="runDraft(false)">Lancer le tirage au sort (Automatique)</button>
-    <button class="secondary" onclick="runDraft(true)">Forcer le tirage (Coach / Admin)</button>
+    <button class="secondary" onclick="runDraft(true)">Forcer le tirage</button>
    </div>
    <div id="draftResults" style="margin-top:16px"></div>
   </div>
@@ -151,6 +192,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 <footer>Basket & Cinéma — Challenge Vacances · Créé pour jouer fair-play et découvrir la culture basket.</footer>
 
 <script>
+const CORRECT_ADMIN_PIN = "2026"; // Code PIN modifiable ici par le coach
 const ROSTER = [
  "Lùca", "Axel", "Hugo", "Sacha R", "Edouard", "Samuel", 
  "Raphaël", "Nolan", "Kevin", "Lucas", "Ange", "Sacha C", 
@@ -218,25 +260,105 @@ const baseQuestions = [
  {id:40, movieId:"shaqstyle", q:"[Précis] Quel modèle de sneaker signature légendaire créé pour Iverson dans les années 90 est réédité dans la série ?", opts:["The Question / Answer","Shaq Attaq","Pump Omni Zone","Kamikaze"], a:0, pts:2.5, why:"Les modèles Answer / Question font partie de la relance."}
 ];
 
+let session = JSON.parse(localStorage.getItem("basketCinemaSession") || 'null');
 let data = JSON.parse(localStorage.getItem("basketCinemaData") || '{"name":"","team":"","points":0,"watched":[],"quizBest":0}');
 let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]');
 let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
 let teamAttempts = JSON.parse(localStorage.getItem("basketCinemaTeamAttempts") || '{}');
 
 function save(){
+ localStorage.setItem("basketCinemaSession",JSON.stringify(session));
  localStorage.setItem("basketCinemaData",JSON.stringify(data));
  localStorage.setItem("basketCinemaReady",JSON.stringify(readyPlayers));
  localStorage.setItem("basketCinemaTeams",JSON.stringify(teamsData));
  localStorage.setItem("basketCinemaTeamAttempts",JSON.stringify(teamAttempts));
- renderProfile();
- renderLeaderboard();
+ renderAll();
+}
+
+function switchAuthTab(type){
+ document.getElementById("tabPlayerBtn").classList.toggle("active", type === 'player');
+ document.getElementById("tabAdminForm").classList.toggle("hidden", type === 'player');
+ document.getElementById("tabAdminBtn").classList.toggle("active", type === 'admin');
+ document.getElementById("authPlayerForm").classList.toggle("hidden", type === 'admin');
+}
+
+function initModalDropdown(){
+ let sel = document.getElementById("modalPlayerName");
+ if(!sel) return;
+ sel.innerHTML = `<option value="">-- Choisis ton prénom --</option>` + 
+  ROSTER.map(p => `<option value="${p}">${p}</option>`).join("");
+}
+
+function loginAsPlayer(){
+ let name = document.getElementById("modalPlayerName").value;
+ let team = document.getElementById("modalTeamName").value.trim();
+ if(!name){ alert("Veuillez sélectionner votre prénom !"); return; }
+ if(!team){ alert("Veuillez entrer le nom de votre équipe !"); return; }
+
+ session = { role: 'player', name: name };
+ data.name = name;
+ data.team = team;
+
+ if(!readyPlayers.includes(name)) readyPlayers.push(name);
+ syncPlayerToTeams();
+ save();
+ checkSession();
+}
+
+function loginAsAdmin(){
+ let pin = document.getElementById("adminPinInput").value;
+ if(pin !== CORRECT_ADMIN_PIN){
+  alert("❌ Code PIN incorrect !");
+  return;
+ }
+ session = { role: 'admin', name: 'Administrateur' };
+ save();
+ checkSession();
+}
+
+function logout(){
+ if(confirm("Voulez-vous vous déconnecter de cet appareil ?")){
+  session = null;
+  localStorage.removeItem("basketCinemaSession");
+  location.reload();
+ }
+}
+
+function checkSession(){
+ let modal = document.getElementById("authModal");
+ let badge = document.getElementById("userSessionBadge");
+ let adminPanel = document.getElementById("adminPanelContainer");
+
+ if(!session){
+  modal.classList.remove("hidden");
+  initModalDropdown();
+  return;
+ }
+
+ modal.classList.add("hidden");
+ if(session.role === 'admin'){
+  badge.textContent = "🔑 Mode Administrateur";
+  if(adminPanel) adminPanel.classList.remove("hidden");
+ } else {
+  badge.textContent = `👤 ${session.name} (${data.team || 'Sans équipe'})`;
+  if(adminPanel) adminPanel.classList.add("hidden");
+  let inputName = document.getElementById("displayPlayerName");
+  let inputTeam = document.getElementById("teamName");
+  if(inputName) inputName.value = data.name;
+  if(inputTeam) inputTeam.value = data.team || "";
+ }
+ renderAll();
+}
+
+function renderAll(){
+ renderHomeProgress();
  renderChecklist();
  renderMovies();
- renderHomeProgress();
+ renderProfile();
+ renderLeaderboard();
 }
 
 function renderHomeProgress(){
- // Mettre à jour la jauge d'émargement en page d'accueil
  let readyCount = readyPlayers.length;
  let pct = Math.round((readyCount / ROSTER.length) * 100);
  let countEl = document.getElementById("heroReadyCount");
@@ -244,7 +366,6 @@ function renderHomeProgress(){
  if(countEl) countEl.textContent = `${readyCount} / ${ROSTER.length} Joueurs (${pct}%)`;
  if(barEl) barEl.style.width = `${pct}%`;
 
- // Mettre à jour le graphique des équipes en page d'accueil
  let chartDiv = document.getElementById("homeTeamChart");
  if(!chartDiv) return;
 
@@ -264,7 +385,7 @@ function renderHomeProgress(){
  teamSummary.sort((a,b) => b.totalPoints - a.totalPoints);
 
  if(teamSummary.length === 0){
-  chartDiv.innerHTML = `<p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment. Allez dans Profil & Draft !</p>`;
+  chartDiv.innerHTML = `<p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment.</p>`;
  } else {
   let maxPts = Math.max(...teamSummary.map(t => t.totalPoints), 100);
   chartDiv.innerHTML = teamSummary.map((t, idx) => {
@@ -284,14 +405,6 @@ function renderHomeProgress(){
  }
 }
 
-function initRosterDropdown(){
- let sel = document.getElementById("playerName");
- if(!sel) return;
- sel.innerHTML = `<option value="">-- Choisis ton prénom --</option>` + 
-  ROSTER.map(p => `<option value="${p}">${p}</option>`).join("");
- if(data.name) sel.value = data.name;
-}
-
 function renderChecklist(){
  let grid = document.getElementById("checkGrid");
  if(!grid) return;
@@ -304,14 +417,6 @@ function renderChecklist(){
  }).join("");
  let cnt = document.getElementById("readyCount");
  if(cnt) cnt.textContent = `${readyPlayers.length} / ${ROSTER.length}`;
-}
-
-function onPlayerSelectChange(){
- let pName = document.getElementById("playerName").value;
- if(pName && !readyPlayers.includes(pName)){
-  readyPlayers.push(pName);
-  save();
- }
 }
 
 function showTab(id){
@@ -344,7 +449,6 @@ function renderMovies(){
 
  grid.innerHTML = movies.map(m => {
   let unlocked = isMovieUnlockedForTeam(m.id);
-  // Si la limite de tentatives est atteinte, les films débloqués sont grisés et verrouillés comme vus
   let forceCheckAndDisable = isMaxAttempts && unlocked;
   let isChecked = forceCheckAndDisable || data.watched.includes(m.id);
 
@@ -373,13 +477,12 @@ function renderMovies(){
 
 function toggleWatched(id,checked){
  if(!data.name || !data.team){
-  alert("⚠️ Tu dois d'abord enregistrer ton profil dans l'onglet Profil & Draft avant de cocher un film !");
-  renderMovies();
+  alert("⚠️ Profil incomplet.");
   return;
  }
  let attempts = teamAttempts[data.team] || 0;
  if(attempts >= 2){
-  alert("🔒 La limite de tentatives de ton équipe a été atteinte. Les films sont désormais verrouillés.");
+  alert("🔒 La limite de tentatives de ton équipe a été atteinte.");
   renderMovies();
   return;
  }
@@ -390,43 +493,31 @@ function toggleWatched(id,checked){
 }
 
 function renderProfile(){
- initRosterDropdown();
- renderChecklist();
- let name=document.getElementById("playerName");
- let team=document.getElementById("teamName");
- if(name&&document.activeElement!==name)name.value=data.name||"";
- if(team&&document.activeElement!==team)team.value=data.team||"";
- let pts=document.getElementById("profilePoints");
- if(pts)pts.textContent=Math.round(data.points||0);
- let watched=document.getElementById("profileWatched");
- if(watched)watched.textContent=(data.watched||[]).length+"/8";
- let badge=document.getElementById("profileBadge");
+ let teamInput = document.getElementById("teamName");
+ if(teamInput && document.activeElement !== teamInput) teamInput.value = data.team || "";
+ let pts = document.getElementById("profilePoints");
+ if(pts) pts.textContent = Math.round(data.points||0);
+ let watched = document.getElementById("profileWatched");
+ if(watched) watched.textContent = (data.watched||[]).length+"/8";
+ let badge = document.getElementById("profileBadge");
  if(badge){
-  let b=data.points>=85?"🏆 MVP du Cinéma Basket":data.points>=60?"🎬 Cinéphile All-Star":data.points>=30?"🧠 Coach en devenir":"🏀 Rookie Cinéphile";
-  badge.textContent=b;
+  let b = data.points>=85?"🏆 MVP du Cinéma Basket":data.points>=60?"🎬 Cinéphile All-Star":data.points>=30?"🧠 Coach en devenir":"🏀 Rookie Cinéphile";
+  badge.textContent = b;
  }
 }
 
 document.getElementById("profileForm").addEventListener("submit",e=>{
  e.preventDefault();
  let oldTeam = data.team;
- data.name=document.getElementById("playerName").value;
- data.team=document.getElementById("teamName").value.trim().slice(0,30);
+ data.team = document.getElementById("teamName").value.trim().slice(0,30);
  
- if(data.name && !readyPlayers.includes(data.name)){
-  readyPlayers.push(data.name);
- }
-
- // Si le joueur change le nom de son équipe, migrer ses données
  if(oldTeam && oldTeam !== data.team && teamsData[oldTeam] && teamsData[oldTeam][data.name]){
   delete teamsData[oldTeam][data.name];
  }
 
  syncPlayerToTeams();
  save();
- let s=document.getElementById("profileStatus");
- s.textContent="Profil enregistré ! Tu es bien inscrit sous le prénom "+data.name+" dans l'équipe « "+data.team+" ».";
- s.classList.remove("hidden");
+ alert("Nom d'équipe mis à jour avec succès !");
 });
 
 function syncPlayerToTeams(){
@@ -437,12 +528,11 @@ function syncPlayerToTeams(){
 
 function runDraft(force){
  if(!force && readyPlayers.length < ROSTER.length){
-  alert(`Attention : seulement ${readyPlayers.length}/${ROSTER.length} joueurs ont créé leur profil. Vous pouvez attendre les autres ou cliquer sur "Forcer le tirage".`);
+  alert(`Attention : seulement ${readyPlayers.length}/${ROSTER.length} joueurs ont créé leur profil.`);
   return;
  }
 
  let pool = readyPlayers.length >= 3 ? [...readyPlayers] : [...ROSTER];
- 
  for (let i = pool.length - 1; i > 0; i--) {
   let j = Math.floor(Math.random() * (i + 1));
   [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -463,7 +553,7 @@ function runDraft(force){
  });
 
  let resDiv = document.getElementById("draftResults");
- resDiv.innerHTML = "<h3>🎉 Résultat du tirage au sort des équipes :</h3>" + Object.keys(generatedTeams).map(tName => `
+ resDiv.innerHTML = "<h3>🎉 Résultat du tirage au sort :</h3>" + Object.keys(generatedTeams).map(tName => `
   <div class="team-card">
    <strong style="color:var(--orange)">🏀 ${tName}</strong> (${generatedTeams[tName].length} joueurs)
    <div style="margin-top:4px">Membres : ${generatedTeams[tName].join(", ")}</div>
@@ -474,10 +564,6 @@ function runDraft(force){
   if(!teamsData[tName]) teamsData[tName] = {};
   generatedTeams[tName].forEach(p => {
    if(!teamsData[tName][p]) teamsData[tName][p] = { points: 0, watchedList: [] };
-   if(p === data.name){
-    data.team = tName;
-    document.getElementById("teamName").value = tName;
-   }
   });
  });
  save();
@@ -526,28 +612,20 @@ let current=0,sessionScore=0,answered=false;
 function startQuiz(){
  let area=document.getElementById("quizArea");
  if(!data.name || !data.team){
-  area.innerHTML=`
-   <div class="notice">⚠️ <strong>Profil requis !</strong><br>Enregistre ton prénom et ton équipe dans l'onglet <strong>👤 Profil & Draft</strong> pour lancer le quiz.</div>
-   <button style="margin-top:14px" onclick="showTab('profil')">Aller au profil →</button>
-  `;
+  area.innerHTML=`<div class="notice">⚠️ Profil requis.</div>`;
   return;
  }
 
  let attempts = teamAttempts[data.team] || 0;
  if(attempts >= 2){
-  area.innerHTML=`
-   <div class="notice" style="border-color:#ff7979;background:#45232a">❌ <strong>Limite de tentatives atteinte !</strong><br>Votre équipe (${escapeHtml(data.team)}) a déjà utilisé ses <strong>2 tentatives autorisées</strong>. Les films ont été validés et grisés.</div>
-  `;
+  area.innerHTML=`<div class="notice" style="border-color:#ff7979;background:#45232a">❌ <strong>Tentatives épuisées (2/2).</strong></div>`;
   return;
  }
 
  activeQuestions = getTeamUniqueQuestions(data.team);
  
  if(activeQuestions.length === 0){
-  area.innerHTML=`
-   <div class="notice">🔒 <strong>Aucun quiz disponible !</strong><br>Pour qu'un film ou docu débloque son quiz, <strong>au moins 2 joueurs de votre équipe</strong> doivent l'avoir coché dans l'onglet <strong>🎬 Films & Docus</strong>. Coordonnez-vous avec votre équipe !</div>
-   <button style="margin-top:14px" onclick="showTab('films')">Voir les films →</button>
-  `;
+  area.innerHTML=`<div class="notice">🔒 <strong>Aucun quiz disponible !</strong> Au moins 2 joueurs de votre équipe doivent valider l'œuvre dans l'onglet Films.</div>`;
   return;
  }
 
@@ -562,7 +640,6 @@ function renderQuestion(){
  let area=document.getElementById("quizArea");
  if(current>=activeQuestions.length){
   teamAttempts[data.team] = (teamAttempts[data.team] || 0) + 1;
-  
   let maxPossible = activeQuestions.reduce((acc,q)=>acc+q.pts,0);
   let isPerfect = sessionScore >= maxPossible;
 
@@ -576,8 +653,7 @@ function renderQuestion(){
   area.innerHTML=`
    <h3>🏁 Tentative terminée pour l'équipe ${escapeHtml(data.team)} !</h3>
    <div class="score">${Math.round(sessionScore)} / ${Math.round(maxPossible)} pts</div>
-   <p>${isPerfect ? "🏆 <strong>MVP !</strong> Votre équipe a réalisé un sans-faute !" : "❌ <strong>Attention :</strong> Il y a des erreurs dans vos réponses ! Le système ne révèle pas lesquelles. Discutez-en en équipe pour rectifier le tir lors de votre prochaine tentative."}</p>
-   <p class="small">Tentatives utilisées pour l'équipe : <strong>${teamAttempts[data.team]} / 2</strong></p>
+   <p>${isPerfect ? "🏆 <strong>Sans-faute !</strong>" : "❌ <strong>Attention :</strong> Il y a des erreurs dans vos réponses ! Discutez-en en équipe."}</p>
    <button onclick="startQuiz()">Relancer une tentative</button>
   `;
   return;
@@ -586,7 +662,7 @@ function renderQuestion(){
  let q=activeQuestions[current];
  answered=false;
  area.innerHTML=`
-  <div class="small">Équipe : <strong style="color:var(--orange)">${escapeHtml(data.team)}</strong> · Question ${current+1} sur ${activeQuestions.length} · <span style="color:var(--orange)">Valeur : ${q.pts} pts</span></div>
+  <div class="small">Équipe : <strong style="color:var(--orange)">${escapeHtml(data.team)}</strong> · Question ${current+1} sur ${activeQuestions.length}</div>
   <h3>${q.q}</h3>
   <div id="options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>
   <div id="feedback"></div>
@@ -603,10 +679,8 @@ function answer(i){
   if(j===q.a)b.classList.add("correct");
   if(j===i&&i!==q.a)b.classList.add("wrong");
  });
- if(i===q.a){
-  sessionScore+=q.pts;
- }
- document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>${i===q.a?"✅ Bonne réponse enregistrée !":"❌ Réponse enregistrée."}</strong><br><em>Le détail des erreurs n'est pas affiché pour pousser la collaboration d'équipe.</em></div>`;
+ if(i===q.a) sessionScore+=q.pts;
+ document.getElementById("feedback").innerHTML=`<div class="feedback"><strong>Réponse enregistrée.</strong></div>`;
  document.getElementById("nextBtn").classList.remove("hidden");
 }
 
@@ -627,49 +701,42 @@ function renderLeaderboard(){
   });
 
   teamSummary.sort((a,b) => b.totalPoints - a.totalPoints);
-
-  if(teamSummary.length === 0){
-   teamEl.innerHTML = `<p class="small">Aucune équipe enregistrée pour l'instant.</p>`;
-  } else {
-   teamEl.innerHTML = teamSummary.map((t, rank) => `
-    <div class="team-card">
-     <div class="row">
-      <div><strong>${rank===0?"🥇":rank===1?"🥈":rank===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberCount} joueurs)</div>
-      <div style="text-align:right"><strong style="color:var(--orange);font-size:1.2rem">${Math.round(t.totalPoints)} pts</strong></div>
-     </div>
-     <div class="small">Tentatives utilisées : ${t.attempts} / 2</div>
+  teamEl.innerHTML = teamSummary.map((t, rank) => `
+   <div class="team-card">
+    <div class="row">
+     <div><strong>${rank===0?"🥇":rank===1?"🥈":rank===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberCount} joueurs)</div>
+     <div style="text-align:right"><strong style="color:var(--orange);font-size:1.2rem">${Math.round(t.totalPoints)} pts</strong></div>
     </div>
-   `).join("");
-  }
+    <div class="small">Tentatives utilisées : ${t.attempts} / 2</div>
+   </div>
+  `).join("");
  }
 
  let el=document.getElementById("leaderboard");
  if(!el)return;
- el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur anonyme")}${data.team?" · Équipe : "+escapeHtml(data.team):""}</span><strong>${Math.round(data.points||0)} / 100 pts</strong></div><p class="small">Vus : ${(data.watched||[]).length}/8</p>`;
+ el.innerHTML=`<div class="leader-row"><span>🏀 ${escapeHtml(data.name||"Joueur")}</span><strong>${Math.round(data.points||0)} / 100 pts</strong></div>`;
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 function shareProgress(){
- let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name||"Un joueur"}${data.team?" (Équipe "+data.team+")":""}\nPoints : ${Math.round(data.points||0)}/100\nProgression : ${(data.watched||[]).length}/8 vus\nÀ toi de jouer !`;
- if(navigator.share)navigator.share({title:"Challenge Basket & Cinéma",text:msg}).catch(()=>{});
- else if(navigator.clipboard)navigator.clipboard.writeText(msg).then(()=>alert("Progression copiée !"));
- else prompt("Copie ta progression :",msg);
+ let msg=`🏀🎬 Challenge Basket & Cinéma !\n${data.name} (Équipe ${data.team})\nPoints : ${Math.round(data.points||0)}/100`;
+ if(navigator.share) navigator.share({title:"Challenge",text:msg}).catch(()=>{});
+ else if(navigator.clipboard) navigator.clipboard.writeText(msg).then(()=>alert("Copié !"));
 }
 
 function exportProgress(){
  let blob=new Blob([JSON.stringify({player: data, teams: teamsData, ready: readyPlayers, attempts: teamAttempts},null,2)],{type:"application/json"});
  let a=document.createElement("a");
  a.href=URL.createObjectURL(blob);
- a.download="basket-cinema-progression.json";
+ a.download="basket-cinema.json";
  a.click();
- URL.revokeObjectURL(a.href);
 }
 
-renderMovies();
-renderProfile();
-renderLeaderboard();
-renderHomeProgress();
+// Lancement au démarrage
+window.onload = function(){
+ checkSession();
+}
 </script>
 </body>
 </html>
