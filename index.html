@@ -152,8 +152,11 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     <label class="field">Mon Prénom
      <input id="displayPlayerName" disabled style="background:#18253a">
     </label>
-    <label class="field">Mon Équipe
-     <input id="teamName" disabled style="background:#18253a;color:var(--orange);font-weight:700">
+    <label class="field">Mon Équipe (Saisir ou modifier le nom de ton équipe)
+     <div style="display:flex;gap:8px">
+      <input id="teamName" placeholder="Entrer ou modifier le nom de ton équipe" style="background:#0c1524;color:var(--orange);font-weight:700">
+      <button onclick="updatePlayerTeam()" style="padding:8px 14px;white-space:nowrap">Enregistrer</button>
+     </div>
     </label>
    </form>
    <div class="panel" style="margin-top:18px">
@@ -197,6 +200,13 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 
    <hr style="border-color:var(--line);margin:20px 0">
 
+   <h3>⚙️ Personnalisation des Équipes pour le Tirage au Sort</h3>
+   <p class="small">Saisissez les noms des équipes séparés par des virgules :</p>
+   <div style="display:flex;gap:8px;margin-bottom:16px">
+    <input id="customTeamNamesInput" placeholder="Ex: Team Dunk, Team Crossover, Team Clutch, Team Alley-Oop, Team Fastbreak" style="flex:1">
+    <button class="secondary" onclick="saveCustomTeamNames()">Sauvegarder les noms</button>
+   </div>
+
    <h3>👥 Émargement des 17 Joueurs</h3>
    <div id="checkGrid" class="player-check-grid"></div>
 
@@ -234,9 +244,8 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
 <footer>Basket & Cinéma — Challenge Vacances · Créé pour jouer fair-play et découvrir la culture basket.</footer>
 
 <script>
-const CORRECT_ADMIN_PIN = "0926"; // Code PIN Admin (Coach Vincent)
+const CORRECT_ADMIN_PIN = "0926";
 
-// Liste triée par ordre alphabétique
 const ROSTER = [
  "Adam", "Ange", "Axel", "Edouard", "Gabriel", "Hugo", 
  "Kevin", "Lucas", "Lùca", "Nathan", "Nelio", "Nolan", 
@@ -310,6 +319,7 @@ let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]')
 let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
 let teamAttempts = JSON.parse(localStorage.getItem("basketCinemaTeamAttempts") || '{}');
 let playerPins = JSON.parse(localStorage.getItem("basketCinemaPlayerPins") || '{}');
+let customTeamNames = JSON.parse(localStorage.getItem("basketCinemaCustomTeams") || '["Team Dunk", "Team Crossover", "Team Clutch", "Team Alley-Oop", "Team Fastbreak"]');
 
 function loadPlayerData(pName) {
  if (!pName) {
@@ -329,6 +339,7 @@ function save(){
  localStorage.setItem("basketCinemaTeams", JSON.stringify(teamsData));
  localStorage.setItem("basketCinemaTeamAttempts", JSON.stringify(teamAttempts));
  localStorage.setItem("basketCinemaPlayerPins", JSON.stringify(playerPins));
+ localStorage.setItem("basketCinemaCustomTeams", JSON.stringify(customTeamNames));
  if (session && session.role === 'player' && data.name) {
   savePlayerData(data.name);
  }
@@ -464,6 +475,9 @@ function checkSession(){
   if(profileTabBtn) profileTabBtn.textContent = "📊 Tableau de Bord";
   if(adminPanel) adminPanel.classList.remove("hidden");
   if(playerPanel) playerPanel.classList.add("hidden");
+  
+  let customInput = document.getElementById("customTeamNamesInput");
+  if(customInput) customInput.value = customTeamNames.join(", ");
  } else {
   data = loadPlayerData(session.name);
   data.team = getTeamForPlayer(data.name);
@@ -690,6 +704,36 @@ function toggleWatched(id,checked){
  save();
 }
 
+function updatePlayerTeam(){
+ let newTeam = document.getElementById("teamName").value.trim();
+ if(!newTeam){
+  alert("Veuillez saisir un nom d'équipe valide.");
+  return;
+ }
+ 
+ // Nettoyer l'ancienne association si elle existait
+ if(data.team && teamsData[data.team] && teamsData[data.team][data.name]){
+  delete teamsData[data.team][data.name];
+ }
+
+ data.team = newTeam;
+ syncPlayerToTeams();
+ save();
+ alert(`Ton équipe a bien été mise à jour : ${newTeam} !`);
+}
+
+function saveCustomTeamNames(){
+ let val = document.getElementById("customTeamNamesInput").value;
+ let list = val.split(",").map(s => s.trim()).filter(s => s.length > 0);
+ if(list.length === 0){
+  alert("Veuillez entrer au moins un nom d'équipe.");
+  return;
+ }
+ customTeamNames = list;
+ save();
+ alert("Noms d'équipes enregistrés pour les prochains tirages !");
+}
+
 function renderProfile(){
  let inputName = document.getElementById("displayPlayerName");
  let inputTeam = document.getElementById("teamName");
@@ -725,7 +769,7 @@ function runDraft(force){
   [pool[i], pool[j]] = [pool[j], pool[i]];
  }
 
- let teamNames = ["Team Dunk", "Team Crossover", "Team Clutch", "Team Alley-Oop", "Team Fastbreak"];
+ let teamNames = customTeamNames.length > 0 ? customTeamNames : ["Team Dunk", "Team Crossover", "Team Clutch", "Team Alley-Oop", "Team Fastbreak"];
  let generatedTeams = {};
  let numTeams = Math.floor(pool.length / 3);
  if(numTeams === 0) numTeams = 1;
@@ -752,6 +796,8 @@ function runDraft(force){
   teamsData[tName] = {};
   generatedTeams[tName].forEach(p => {
    let pData = loadPlayerData(p);
+   pData.team = tName;
+   localStorage.setItem("basketCinemaData_" + p, JSON.stringify(pData));
    teamsData[tName][p] = { points: pData.points || 0, watchedList: pData.watched || [] };
    if(p === data.name){
     data.team = tName;
