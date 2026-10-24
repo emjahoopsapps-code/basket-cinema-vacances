@@ -177,7 +177,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
     </div>
    </div>
 
-   <!-- DÉPLACÉ DANS L'ADMIN : GRAPHIQUE DE PROGRESSION DES ÉQUIPES -->
+   <!-- GRAPHIQUE DE PROGRESSION DES ÉQUIPES (ADMIN) -->
    <div style="background:#18253a;border:1px solid var(--line);border-radius:12px;padding:16px;margin:20px 0">
     <h3 style="margin-top:0">📊 Graphique de progression par équipe</h3>
     <p class="small">Classement en direct des points cumulés par équipe :</p>
@@ -233,7 +233,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}button,.btn{border:0;borde
  <section id="classement" class="view hidden">
   <div class="panel">
    <h2>🏆 Classement général des Équipes</h2>
-   <p>Les scores collectifs, le nombre de tentatives et les membres de chaque équipe s'affichent ci-dessous.</p>
+   <p>Les scores collectifs (basés sur la moyenne des quiz validés), les tentatives et les membres s'affichent ci-dessous.</p>
    <div id="teamLeaderboard"></div>
    <hr style="border-color:var(--line);margin:20px 0">
    <h3>Mon profil sur cet appareil</h3>
@@ -322,6 +322,7 @@ let data = { name: "", team: "", points: 0, watched: [], quizBest: 0 };
 let readyPlayers = JSON.parse(localStorage.getItem("basketCinemaReady") || '[]');
 let teamsData = JSON.parse(localStorage.getItem("basketCinemaTeams") || '{}');
 let teamAttempts = JSON.parse(localStorage.getItem("basketCinemaTeamAttempts") || '{}');
+let teamQuizScores = JSON.parse(localStorage.getItem("basketCinemaTeamQuizScores") || '{}'); // Stocke les scores par quiz et par équipe
 let playerPins = JSON.parse(localStorage.getItem("basketCinemaPlayerPins") || '{}');
 let customTeamNames = JSON.parse(localStorage.getItem("basketCinemaCustomTeams") || '["Team Dunk", "Team Crossover", "Team Clutch", "Team Alley-Oop", "Team Fastbreak"]');
 
@@ -342,6 +343,7 @@ function save(){
  localStorage.setItem("basketCinemaReady", JSON.stringify(readyPlayers));
  localStorage.setItem("basketCinemaTeams", JSON.stringify(teamsData));
  localStorage.setItem("basketCinemaTeamAttempts", JSON.stringify(teamAttempts));
+ localStorage.setItem("basketCinemaTeamQuizScores", JSON.stringify(teamQuizScores));
  localStorage.setItem("basketCinemaPlayerPins", JSON.stringify(playerPins));
  localStorage.setItem("basketCinemaCustomTeams", JSON.stringify(customTeamNames));
  if (session && session.role === 'player' && data.name) {
@@ -507,6 +509,22 @@ function renderAll(){
  renderAdminDashboard();
 }
 
+// Calcul du score total d'une équipe basé sur la moyenne de ses quiz validés
+function getTeamTotalScore(tName) {
+ if(!teamQuizScores[tName]) return 0;
+ let quizMap = teamQuizScores[tName];
+ let quizIds = Object.keys(quizMap);
+ if(quizIds.length === 0) return 0;
+
+ let sumPercentages = 0;
+ quizIds.forEach(qId => {
+  sumPercentages += quizMap[qId]; // Pourcentage (ex: 80 pour 80%)
+ });
+
+ // Moyenne des pourcentages ramenée sur un barème de 100 max
+ return Math.round(sumPercentages / movies.length); 
+}
+
 function renderHomeProgress(){
  let readyCount = readyPlayers.length;
  let pct = Math.round((readyCount / ROSTER.length) * 100);
@@ -522,12 +540,8 @@ function renderHomeProgress(){
  let teamSummary = [];
  Object.keys(teamsData).forEach(tName => {
   let members = teamsData[tName];
-  let totalPts = 0;
-  let count = 0;
-  Object.keys(members).forEach(m => {
-   totalPts += members[m].points || 0;
-   count++;
-  });
+  let totalPts = getTeamTotalScore(tName);
+  let count = Object.keys(members).length;
   teamSummary.push({ name: tName, totalPoints: totalPts, memberCount: count });
  });
 
@@ -573,6 +587,40 @@ function renderChecklist(){
 }
 
 function renderAdminDashboard(){
+ let chartDiv = document.getElementById("homeTeamChart");
+ if(chartDiv){
+  syncPlayerToTeams();
+  let teamSummary = [];
+  Object.keys(teamsData).forEach(tName => {
+   let members = teamsData[tName];
+   let totalPts = getTeamTotalScore(tName);
+   let count = Object.keys(members).length;
+   teamSummary.push({ name: tName, totalPoints: totalPts, memberCount: count });
+  });
+
+  teamSummary.sort((a,b) => b.totalPoints - a.totalPoints);
+
+  if(teamSummary.length === 0){
+   chartDiv.innerHTML = `<p class="small" style="color:var(--muted)">Aucune équipe enregistrée pour le moment.</p>`;
+  } else {
+   let maxPts = Math.max(...teamSummary.map(t => t.totalPoints), 100);
+   chartDiv.innerHTML = teamSummary.map((t, idx) => {
+    let barWidth = Math.round((t.totalPoints / maxPts) * 100);
+    return `
+     <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:.88rem;margin-bottom:3px">
+       <span><strong>${idx===0?"🥇":idx===1?"🥈":idx===2?"🥉":"🏀"} ${escapeHtml(t.name)}</strong> (${t.memberCount} p.)</span>
+       <strong style="color:var(--orange)">${Math.round(t.totalPoints)} pts</strong>
+      </div>
+      <div class="progress-bar-container">
+       <div class="progress-bar-fill" style="width:${barWidth}%"></div>
+      </div>
+     </div>
+    `;
+   }).join("");
+  }
+ }
+
  if(!session || session.role !== 'admin') return;
 
  document.getElementById("adminKpiProfiles").textContent = `${readyPlayers.length} / ${ROSTER.length}`;
@@ -591,7 +639,7 @@ function renderAdminDashboard(){
  let topTeam = "-";
  let maxPts = -1;
  Object.keys(teamsData).forEach(tName => {
-  let tPts = Object.values(teamsData[tName]).reduce((acc, m) => acc + (m.points || 0), 0);
+  let tPts = getTeamTotalScore(tName);
   if(tPts > maxPts){
    maxPts = tPts;
    topTeam = tName;
@@ -899,19 +947,24 @@ function renderQuestion(){
  if(current>=activeQuestions.length){
   teamAttempts[data.team] = (teamAttempts[data.team] || 0) + 1;
   let maxPossible = activeQuestions.reduce((acc,q)=>acc+q.pts,0);
-  let isPerfect = sessionScore >= maxPossible;
+  let percentage = maxPossible > 0 ? Math.round((sessionScore / maxPossible) * 100) : 0;
 
-  if(isPerfect){
-   data.points = Math.min(100,(data.points||0)+sessionScore);
-   data.quizBest = Math.max(data.quizBest||0,sessionScore);
-  }
+  // Enregistrement du pourcentage pour ce quiz (par exemple basé sur le premier film actif ou global)
+  if(!teamQuizScores[data.team]) teamQuizScores[data.team] = {};
+  // On enregistre le meilleur score pour ce quiz
+  let currentMovieId = activeQuestions[0].movieId;
+  teamQuizScores[data.team][currentMovieId] = Math.max(teamQuizScores[data.team][currentMovieId] || 0, percentage);
+
+  data.points = Math.min(100,(data.points||0)+sessionScore);
+  data.quizBest = Math.max(data.quizBest||0,sessionScore);
+  
   syncPlayerToTeams();
   save();
 
   area.innerHTML=`
    <h3>🏁 Tentative terminée pour l'équipe ${escapeHtml(data.team)} !</h3>
-   <div class="score">${Math.round(sessionScore)} / ${Math.round(maxPossible)} pts</div>
-   <p>${isPerfect ? "🏆 <strong>Sans-faute !</strong>" : "❌ <strong>Attention :</strong> Il y a des erreurs dans vos réponses ! Discutez-en en équipe."}</p>
+   <div class="score">${Math.round(sessionScore)} / ${Math.round(maxPossible)} pts (${percentage}%)</div>
+   <p>❌ <strong>Résultat enregistré.</strong> Le score de l'équipe est calculé par moyenne sur les quiz réussis.</p>
    <button onclick="startQuiz()">Relancer une tentative</button>
   `;
   return;
@@ -950,10 +1003,7 @@ function renderLeaderboard(){
   Object.keys(teamsData).forEach(tName => {
    let members = teamsData[tName];
    let memberNames = Object.keys(members);
-   let totalPts = 0;
-   memberNames.forEach(m => {
-    totalPts += members[m].points || 0;
-   });
+   let totalPts = getTeamTotalScore(tName);
    teamSummary.push({ name: tName, totalPoints: totalPts, memberList: memberNames, attempts: teamAttempts[tName] || 0 });
   });
 
